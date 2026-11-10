@@ -1,0 +1,2990 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Crear Videos con Muse AI Gratis y Sin VPN by Rubén Sbarsky — V001</title>
+  <style>
+    :root {
+      --bg-main: #0a0e1a;
+      --bg-card: #0f172a;
+      --bg-elevated: #1e293b;
+      --blue-highlight: #1e3a5f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --accent: #38bdf8;
+      --accent-bright: #00d4ff;
+      --accent-glow: rgba(56, 189, 248, 0.22);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border-color: #1e3a5f;
+      --font-scale: 1;
+      --header-height: 58px;
+      --radius: 12px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+    }
+
+    [data-theme="light"] {
+      --bg-main: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-elevated: #e2e8f0;
+      --blue-highlight: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --accent: #0284c7;
+      --accent-bright: #0369a1;
+      --accent-glow: rgba(2, 132, 199, 0.15);
+      --border-color: #cbd5e1;
+      --shadow: 0 6px 18px -4px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      font-size: calc(16px * var(--font-scale));
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      line-height: 1.65;
+      overflow-x: hidden;
+      padding-top: calc(var(--header-height) + 46px);
+      padding-bottom: 90px;
+      min-height: 100vh;
+    }
+
+    /* Barra de Progreso Superior */
+    #reading-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(30, 58, 95, 0.4);
+      z-index: 100;
+    }
+
+    #reading-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), #a855f7, var(--success));
+      transition: width 0.15s ease-out;
+    }
+
+    /* Barra de Navegación Principal Fija */
+    nav#main-nav {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+      overflow-x: auto;
+      white-space: nowrap;
+      z-index: 40;
+      scrollbar-width: thin;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    nav#main-nav::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    nav#main-nav::-webkit-scrollbar-thumb {
+      background: var(--blue-highlight);
+      border-radius: 4px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 42px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-main);
+      color: var(--text-primary);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .chip:hover, .chip:focus-visible {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .chip.active {
+      background: var(--accent);
+      color: #0a0e1a;
+      border-color: var(--accent);
+      font-weight: 700;
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    #mb {
+      background: var(--blue-highlight);
+      color: #ffffff;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Panel Lateral Índice (#dr) según especificación exacta */
+    #dr {
+      position: fixed;
+      top: 58px;
+      left: 0;
+      bottom: 0;
+      width: min(330px, 88vw);
+      background: #0f172a;
+      border-right: 1px solid #1e3a5f;
+      transform: translateX(-105%);
+      transition: .25s;
+      z-index: 45;
+      overflow: auto;
+      padding: 10px;
+      box-shadow: 6px 0 24px rgba(0, 0, 0, 0.7);
+    }
+
+    #dr.o {
+      transform: none;
+    }
+
+    #dr a {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-radius: 8px;
+      color: #e2e8f0;
+      cursor: pointer;
+      min-height: 44px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      text-decoration: none;
+      margin-bottom: 4px;
+      border: 1px solid transparent;
+    }
+
+    #dr a:hover, #dr a:focus-visible {
+      background: #ffffff0d;
+      border-color: #38bdf844;
+      outline: none;
+    }
+
+    #dr a.on {
+      background: #00d4ff22;
+      color: #00d4ff;
+      font-weight: 700;
+      border-color: #00d4ff55;
+    }
+
+    /* Sub-barra de Herramientas Interactivas */
+    .utility-bar {
+      position: fixed;
+      top: calc(var(--header-height) + 4px);
+      left: 0;
+      right: 0;
+      min-height: 44px;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 4px 10px;
+      z-index: 35;
+      flex-wrap: wrap;
+    }
+
+    .search-wrapper {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      min-width: 150px;
+      max-width: 380px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 2px 8px;
+    }
+
+    .search-wrapper input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      padding: 6px 4px;
+      outline: none;
+    }
+
+    .utility-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tool-btn {
+      min-height: 36px;
+      min-width: 36px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .tool-btn:hover, .tool-btn:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Contenedor Principal Optimizado Samsung Galaxy A02s (360px) */
+    main.container {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 14px 12px;
+    }
+
+    .tab-section {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .tab-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tipografía y Encabezados */
+    h1 {
+      font-size: clamp(1.45rem, 4.5vw, 2.25rem);
+      line-height: 1.25;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      font-weight: 800;
+    }
+
+    h2 {
+      font-size: clamp(1.3rem, 3.8vw, 1.85rem);
+      color: var(--accent);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border-color);
+      font-weight: 800;
+    }
+
+    h3 {
+      font-size: clamp(1.1rem, 3vw, 1.35rem);
+      color: var(--text-primary);
+      margin: 20px 0 10px;
+      font-weight: 700;
+    }
+
+    h4 {
+      font-size: 1rem;
+      color: var(--accent);
+      margin: 12px 0 6px;
+      font-weight: 700;
+    }
+
+    p {
+      margin-bottom: 12px;
+      color: var(--text-primary);
+      word-wrap: break-word;
+    }
+
+    ul, ol {
+      margin: 0 0 16px 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    /* Tarjetas y Bloques Didácticos */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .pedagogy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .pedagogy-box {
+      background: var(--bg-elevated);
+      border-left: 4px solid var(--accent);
+      padding: 14px;
+      border-radius: 8px;
+    }
+
+    .pedagogy-box.why {
+      border-left-color: #a855f7;
+    }
+
+    .pedagogy-box.how {
+      border-left-color: var(--success);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .badge-info { background: rgba(56, 189, 248, 0.2); color: var(--accent); border: 1px solid var(--accent); }
+    .badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid var(--success); }
+    .badge-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid var(--warning); }
+    .badge-pro { background: rgba(168, 85, 247, 0.25); color: #c084fc; border: 1px solid #a855f7; }
+
+    /* Contenedor SVG HERO 4:5 Vertical */
+    .hero-svg-wrapper {
+      width: 100%;
+      max-width: 400px;
+      aspect-ratio: 4 / 5;
+      margin: 0 auto 20px;
+      background: radial-gradient(circle at center, #111c35 0%, #070a12 100%);
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 12px 32px rgba(0, 212, 255, 0.18);
+    }
+
+    .hero-svg-mount {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-svg-mount svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .svg-controls-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    /* Bloques Copiables (Prompts, Código, Comandos) */
+    .copy-block {
+      background: #060911;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      margin: 14px 0;
+      overflow: hidden;
+    }
+
+    .copy-header {
+      background: rgba(30, 58, 95, 0.45);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+
+    .copy-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .copy-btn {
+      min-height: 36px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #0a0e1a;
+      border: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-bright);
+    }
+
+    .copy-btn.copied {
+      background: var(--success);
+      color: #ffffff;
+    }
+
+    .copy-content {
+      padding: 14px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.92rem;
+      color: #f8fafc;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.5;
+    }
+
+    /* Bloques de Enlaces URL con botón obligatorio "Abrir enlace en nueva ventana" */
+    .url-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      margin: 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .url-text-box {
+      font-family: monospace;
+      font-size: 0.88rem;
+      background: #060911;
+      color: var(--accent);
+      padding: 8px 10px;
+      border-radius: 6px;
+      word-break: break-all;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .url-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .open-url-btn {
+      min-height: 42px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      border: 1px solid var(--accent);
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .open-url-btn:hover {
+      filter: brightness(1.12);
+    }
+
+    /* Pasos Numerados de Procedimiento */
+    .step-item {
+      border: 1px solid var(--border-color);
+      background: var(--bg-elevated);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #0a0e1a;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-meta {
+      font-size: 0.88rem;
+      background: var(--bg-card);
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 8px;
+      border-left: 3px solid var(--success);
+    }
+
+    /* Diagramas Visuales de Flujo */
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 16px 0;
+      padding: 14px;
+      background: #070b14;
+      border: 1px dashed var(--accent);
+      border-radius: 10px;
+    }
+
+    .flow-node {
+      background: var(--bg-card);
+      border: 1px solid var(--blue-highlight);
+      padding: 10px 14px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .flow-arrow {
+      text-align: center;
+      color: var(--accent);
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    /* Tablas Adaptables */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      margin: 14px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 290px;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background: var(--blue-highlight);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Desplegables / Acordeones (Details/Summary) */
+    details.qa-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    details.qa-item summary {
+      padding: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: 48px;
+      color: var(--text-primary);
+    }
+
+    details.qa-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.qa-item summary::after {
+      content: "▼";
+      font-size: 0.8rem;
+      color: var(--accent);
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    details.qa-item[open] summary::after {
+      transform: rotate(180deg);
+    }
+
+    details.qa-item[open] summary {
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .qa-body {
+      padding: 14px;
+      color: var(--text-primary);
+      background: var(--bg-elevated);
+    }
+
+    /* Listas de Comprobación Interactivas (Checklists) */
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    .checklist-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .checklist-item.completed span {
+      text-decoration: line-through;
+      color: var(--text-secondary);
+    }
+
+    /* Navegación Fija al Final de Cada Pestaña (Anterior / Siguiente) */
+    .tab-footer-nav {
+      margin-top: 28px;
+      padding: 14px;
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      position: sticky;
+      bottom: 10px;
+      z-index: 20;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-step-btn {
+      min-height: 46px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--accent);
+      background: var(--blue-highlight);
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex: 1;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .nav-step-btn.next {
+      background: var(--accent);
+      color: #0a0e1a;
+    }
+
+    .nav-step-btn:hover {
+      filter: brightness(1.1);
+    }
+
+    /* Botones Flotantes Arrastrables (INICIO y ARRIBA) */
+    .draggable-fab {
+      position: fixed;
+      z-index: 60;
+      min-height: 46px;
+      min-width: 86px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #0f172a, #1e3a5f);
+      color: #ffffff;
+      border: 2px solid var(--accent);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.75);
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .draggable-fab:active {
+      cursor: grabbing;
+      border-color: #10b981;
+      transform: scale(0.97);
+    }
+
+    #fab-home {
+      right: 12px;
+      bottom: 136px;
+    }
+
+    #fab-top {
+      right: 12px;
+      bottom: 80px;
+    }
+
+    /* Destacado en Pestaña CRÉDITOS */
+    .credits-author-box {
+      text-align: center;
+      padding: 24px 16px;
+      background: linear-gradient(145deg, #0f172a, #1e3a5f);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      margin: 20px 0;
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+    }
+
+    .credits-author-name {
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      text-shadow: 0 4px 16px rgba(0, 212, 255, 0.5);
+      margin-bottom: 6px;
+    }
+
+    .credits-author-role {
+      font-size: 1.2rem;
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* Buscador Global Resultados */
+    #search-results-panel {
+      display: none;
+      background: var(--bg-card);
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+
+    /* Notificación Toast */
+    #toast-message {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 2px solid var(--accent);
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      z-index: 120;
+      transition: transform 0.25s ease;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+      text-align: center;
+      max-width: 92vw;
+    }
+
+    #toast-message.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Animaciones SVG y soporte prefers-reduced-motion */
+    @keyframes orbitRotateCW {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes orbitRotateCCW {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    @keyframes pulseCore {
+      0%, 100% { transform: scale(1); opacity: 0.92; }
+      50% { transform: scale(1.07); opacity: 1; }
+    }
+    @keyframes floatPanel {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-7px); }
+    }
+    @keyframes audioWave {
+      0%, 100% { transform: scaleY(0.35); }
+      50% { transform: scaleY(1); }
+    }
+    @keyframes dataFlowDash {
+      to { stroke-dashoffset: -40; }
+    }
+
+    .svg-orbit-cw { transform-origin: 200px 235px; animation: orbitRotateCW 26s linear infinite; }
+    .svg-orbit-ccw { transform-origin: 200px 235px; animation: orbitRotateCCW 18s linear infinite; }
+    .svg-core-pulse { transform-origin: 200px 235px; animation: pulseCore 3.2s ease-in-out infinite; }
+    .svg-float-1 { animation: floatPanel 4s ease-in-out infinite; }
+    .svg-float-2 { animation: floatPanel 5s ease-in-out infinite 1.2s; }
+    .svg-wave-bar { transform-origin: center bottom; animation: audioWave 1.1s ease-in-out infinite; }
+    .svg-data-stream { stroke-dasharray: 6 6; animation: dataFlowDash 1.5s linear infinite; }
+
+    .svg-paused * {
+      animation-play-state: paused !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .svg-orbit-cw, .svg-orbit-ccw, .svg-core-pulse, .svg-float-1, .svg-float-2, .svg-wave-bar, .svg-data-stream {
+        animation: none !important;
+      }
+    }
+
+    /* Optimización Samsung Galaxy A02s (360px x 800px) */
+    @media (max-width: 400px) {
+      body {
+        padding-top: calc(var(--header-height) + 52px);
+      }
+      main.container {
+        padding: 10px 8px;
+      }
+      .card {
+        padding: 12px 10px;
+      }
+      .chip {
+        padding: 6px 11px;
+        font-size: 0.82rem;
+      }
+      .tab-footer-nav {
+        padding: 10px 8px;
+        gap: 6px;
+      }
+      .nav-step-btn {
+        font-size: 0.8rem;
+        padding: 8px 8px;
+      }
+      .open-url-btn {
+        min-width: 100%;
+      }
+    }
+
+    /* Hoja de Estilos de Impresión A4 */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 14mm 12mm;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+        font-size: 11pt !important;
+      }
+      nav#main-nav, #dr, .utility-bar, #reading-progress-container, .draggable-fab, .tab-footer-nav, .svg-controls-bar, .copy-btn {
+        display: none !important;
+      }
+      .tab-section {
+        display: block !important;
+        margin-bottom: 24px !important;
+        page-break-inside: auto;
+      }
+      .card, .pedagogy-box, .step-item, details.qa-item, .qa-body, .copy-block, .url-card, .credits-author-box {
+        background: #ffffff !important;
+        color: #000000 !important;
+        border: 1px solid #444444 !important;
+        box-shadow: none !important;
+      }
+      h1, h2, h3, h4, p, li, td, th, summary, .copy-content, .credits-author-name, .credits-author-role {
+        color: #000000 !important;
+        text-shadow: none !important;
+      }
+      th {
+        background: #e2e8f0 !important;
+      }
+      .hero-svg-wrapper {
+        max-width: 260px !important;
+        margin: 10px auto !important;
+        border: 1px solid #000000 !important;
+        background: #0a0e1a !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de progreso de lectura -->
+  <div id="reading-progress-container" aria-hidden="true">
+    <div id="reading-progress-bar"></div>
+  </div>
+
+  <!-- Barra de Navegación Superior Fija con Botón Índice al principio -->
+  <nav id="main-nav" aria-label="Navegación principal del tutorial">
+    <button class="chip" id="mb" aria-label="Abrir índice" aria-expanded="false">☰ Índice</button>
+    <button class="chip nav-tab-btn active" data-tab="0">INICIO</button>
+    <button class="chip nav-tab-btn" data-tab="1">CONCEPTOS</button>
+    <button class="chip nav-tab-btn" data-tab="2">PROCEDIMIENTO</button>
+    <button class="chip nav-tab-btn" data-tab="3">PRÁCTICA</button>
+    <button class="chip nav-tab-btn" data-tab="4">PROMPTS</button>
+    <button class="chip nav-tab-btn" data-tab="5">33 Preguntas (Q&amp;A)</button>
+    <button class="chip nav-tab-btn" data-tab="6">ERRORES</button>
+    <button class="chip nav-tab-btn" data-tab="7">RESUMEN</button>
+    <button class="chip nav-tab-btn" data-tab="8">FUENTES</button>
+    <button class="chip nav-tab-btn" data-tab="9">CRÉDITOS</button>
+  </nav>
+
+  <!-- Panel lateral deslizante del Índice -->
+  <div id="dr" role="navigation" aria-label="Índice completo de secciones"></div>
+
+  <!-- Sub-barra de herramientas utilitarias -->
+  <div class="utility-bar" role="region" aria-label="Herramientas de lectura y búsqueda">
+    <div class="search-wrapper">
+      <span aria-hidden="true">🔍</span>
+      <input type="search" id="global-search-input" placeholder="Buscar en todo el tutorial..." aria-label="Buscar contenido en el tutorial">
+    </div>
+    <div class="utility-controls">
+      <button class="tool-btn" id="btn-font-down" title="Reducir tamaño de letra" aria-label="Reducir tamaño de letra">A-</button>
+      <button class="tool-btn" id="btn-font-up" title="Aumentar tamaño de letra" aria-label="Aumentar tamaño de letra">A+</button>
+      <button class="tool-btn" id="btn-theme-toggle" title="Cambiar entre tema oscuro y claro" aria-label="Cambiar tema visual">🌓</button>
+      <button class="tool-btn" id="btn-print-pdf" title="Imprimir o guardar en PDF" aria-label="Imprimir o guardar como PDF">🖨️ PDF</button>
+    </div>
+  </div>
+
+  <!-- Fuente SVG única oculta (se extrae por JS y se elimina del DOM para evitar animaciones en segundo plano) -->
+  <svg id="master-svg-source" style="display:none;" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bgGrad__UID__" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#070b19"/>
+        <stop offset="50%" stop-color="#0f172a"/>
+        <stop offset="100%" stop-color="#1e1b4b"/>
+      </linearGradient>
+      <radialGradient id="coreGlow__UID__" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.95"/>
+        <stop offset="55%" stop-color="#38bdf8" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="metaRing__UID__" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#38bdf8"/>
+        <stop offset="50%" stop-color="#a855f7"/>
+        <stop offset="100%" stop-color="#10b981"/>
+      </linearGradient>
+      <filter id="neonBlur__UID__" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="4" result="blur"/>
+        <feMerge>
+          <feMergeNode in="blur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+
+    <!-- Fondo del lienzo 4:5 -->
+    <rect width="400" height="500" fill="url(#bgGrad__UID__)"/>
+
+    <!-- Cuadrícula de servidor en la nube -->
+    <g stroke="#1e3a5f" stroke-width="0.7" opacity="0.45">
+      <line x1="0" y1="70" x2="400" y2="70"/>
+      <line x1="0" y1="140" x2="400" y2="140"/>
+      <line x1="0" y1="210" x2="400" y2="210"/>
+      <line x1="0" y1="280" x2="400" y2="280"/>
+      <line x1="0" y1="350" x2="400" y2="350"/>
+      <line x1="0" y1="420" x2="400" y2="420"/>
+      <line x1="65" y1="0" x2="65" y2="500"/>
+      <line x1="135" y1="0" x2="135" y2="500"/>
+      <line x1="200" y1="0" x2="200" y2="500"/>
+      <line x1="265" y1="0" x2="265" y2="500"/>
+      <line x1="335" y1="0" x2="335" y2="500"/>
+    </g>
+
+    <!-- Cabecera visual: Nube de Meta y Estado Sin VPN -->
+    <g class="svg-float-1">
+      <rect x="24" y="18" width="160" height="36" rx="18" fill="#0f172a" stroke="#10b981" stroke-width="1.8"/>
+      <circle cx="46" cy="36" r="7" fill="#10b981"/>
+      <text x="62" y="41" fill="#e2e8f0" font-family="sans-serif" font-size="11" font-weight="bold">ACCESO SIN VPN</text>
+    </g>
+
+    <g class="svg-float-2">
+      <rect x="206" y="18" width="170" height="36" rx="18" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8"/>
+      <text x="222" y="41" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="bold">☁️ CLOUD RENDER 24/7</text>
+    </g>
+
+    <!-- Anillos orbitales de procesamiento IA -->
+    <g class="svg-orbit-cw">
+      <circle cx="200" cy="235" r="132" fill="none" stroke="url(#metaRing__UID__)" stroke-width="2" stroke-dasharray="18 10 6 10"/>
+      <circle cx="200" cy="103" r="6" fill="#38bdf8" filter="url(#neonBlur__UID__)"/>
+      <circle cx="200" cy="367" r="6" fill="#a855f7" filter="url(#neonBlur__UID__)"/>
+    </g>
+
+    <g class="svg-orbit-ccw">
+      <circle cx="200" cy="235" r="102" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="10 14" opacity="0.75"/>
+      <circle cx="98" cy="235" r="5" fill="#10b981"/>
+      <circle cx="302" cy="235" r="5" fill="#00d4ff"/>
+    </g>
+
+    <!-- Líneas de flujo de datos desde los módulos hacia la Bola Mágica -->
+    <path class="svg-data-stream" d="M 80 120 Q 140 165 165 205" fill="none" stroke="#00d4ff" stroke-width="2.2"/>
+    <path class="svg-data-stream" d="M 320 120 Q 260 165 235 205" fill="none" stroke="#a855f7" stroke-width="2.2"/>
+    <path class="svg-data-stream" d="M 85 350 Q 140 300 168 265" fill="none" stroke="#10b981" stroke-width="2.2"/>
+    <path class="svg-data-stream" d="M 315 350 Q 260 300 232 265" fill="none" stroke="#f59e0b" stroke-width="2.2"/>
+
+    <!-- Núcleo Central Protagonista: La Bola Mágica de Muse AI -->
+    <g class="svg-core-pulse">
+      <circle cx="200" cy="235" r="78" fill="url(#coreGlow__UID__)"/>
+      <circle cx="200" cy="235" r="48" fill="#0a0e1a" stroke="url(#metaRing__UID__)" stroke-width="3.5" filter="url(#neonBlur__UID__)"/>
+      <!-- Símbolo infinito/Meta estilizado dentro de la esfera -->
+      <path d="M 172 235 C 172 218, 192 218, 200 235 C 208 252, 228 252, 228 235 C 228 218, 208 218, 200 235 C 192 252, 172 252, 172 235 Z" fill="none" stroke="#00d4ff" stroke-width="4" stroke-linecap="round"/>
+      <text x="200" y="264" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="11" font-weight="bold" letter-spacing="1.5">MUSE AI</text>
+    </g>
+
+    <!-- Tarjeta Satélite 1: Text-to-Image (Póster Guacamayo) -->
+    <g class="svg-float-1">
+      <rect x="18" y="82" width="112" height="62" rx="8" fill="#0f172a" stroke="#00d4ff" stroke-width="1.6"/>
+      <text x="28" y="102" fill="#00d4ff" font-family="sans-serif" font-size="9.5" font-weight="bold">TEXT-TO-IMAGE</text>
+      <text x="28" y="118" fill="#e2e8f0" font-family="sans-serif" font-size="9">🦜 Póster Realista</text>
+      <text x="28" y="133" fill="#94a3b8" font-family="sans-serif" font-size="8.5">Alta Resolución</text>
+    </g>
+
+    <!-- Tarjeta Satélite 2: Text-to-Video (Clips 10s -> 9 min) -->
+    <g class="svg-float-2">
+      <rect x="270" y="82" width="112" height="62" rx="8" fill="#0f172a" stroke="#a855f7" stroke-width="1.6"/>
+      <text x="280" y="102" fill="#c084fc" font-family="sans-serif" font-size="9.5" font-weight="bold">VIDEO + AUDIO</text>
+      <text x="280" y="118" fill="#e2e8f0" font-family="sans-serif" font-size="9">🎬 10s a 9 Minutos</text>
+      <text x="280" y="133" fill="#94a3b8" font-family="sans-serif" font-size="8.5">Voz Integrada</text>
+    </g>
+
+    <!-- Tarjeta Satélite 3: OTP Ctrl+V y Botón "+" -->
+    <g class="svg-float-2">
+      <rect x="18" y="330" width="116" height="62" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="1.6"/>
+      <text x="28" y="350" fill="#34d399" font-family="sans-serif" font-size="9.5" font-weight="bold">CARGA [+] / OTP</text>
+      <text x="28" y="366" fill="#e2e8f0" font-family="sans-serif" font-size="9">⌨️ Pegar: Ctrl + V</text>
+      <text x="28" y="381" fill="#94a3b8" font-family="sans-serif" font-size="8.5">MP3 · PNG · MP4</text>
+    </g>
+
+    <!-- Tarjeta Satélite 4: Prompt Maestro & Consistencia -->
+    <g class="svg-float-1">
+      <rect x="266" y="330" width="116" height="62" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="1.6"/>
+      <text x="276" y="350" fill="#fbbf24" font-family="sans-serif" font-size="9.5" font-weight="bold">PROMPT MAESTRO</text>
+      <text x="276" y="366" fill="#e2e8f0" font-family="sans-serif" font-size="9">🧠 3 a 6 Intentos</text>
+      <text x="276" y="381" fill="#94a3b8" font-family="sans-serif" font-size="8.5"> 👍 Tarea Aceptada</text>
+    </g>
+
+    <!-- Panel Inferior: Sintetizador de Voz y Línea de Tiempo Unificada -->
+    <rect x="20" y="412" width="360" height="70" rx="12" fill="#0f172a" stroke="#1e3a5f" stroke-width="2"/>
+    <text x="36" y="433" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="bold">🎙️ LOCUCIÓN AUTOMÁTICA &amp; ENSAMBLAJE EN LA NUBE (PC APAGADO)</text>
+
+    <!-- Ondas de voz animadas -->
+    <g transform="translate(38, 442)">
+      <rect class="svg-wave-bar" x="0" y="2" width="6" height="24" rx="3" fill="#00d4ff"/>
+      <rect class="svg-wave-bar" x="12" y="6" width="6" height="20" rx="3" fill="#38bdf8" style="animation-delay:0.2s"/>
+      <rect class="svg-wave-bar" x="24" y="0" width="6" height="26" rx="3" fill="#a855f7" style="animation-delay:0.4s"/>
+      <rect class="svg-wave-bar" x="36" y="5" width="6" height="21" rx="3" fill="#10b981" style="animation-delay:0.1s"/>
+      <rect class="svg-wave-bar" x="48" y="3" width="6" height="23" rx="3" fill="#00d4ff" style="animation-delay:0.3s"/>
+    </g>
+
+    <!-- Bloques de línea de tiempo 10s + 1.5m = 9m -->
+    <g transform="translate(112, 444)">
+      <rect x="0" y="2" width="58" height="22" rx="4" fill="#1e3a5f" stroke="#38bdf8"/>
+      <text x="29" y="16" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="9" font-weight="bold">Clip 10s</text>
+      <rect x="66" y="2" width="72" height="22" rx="4" fill="#1e3a5f" stroke="#a855f7"/>
+      <text x="102" y="16" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="9" font-weight="bold">Tramo 1.5m</text>
+      <rect x="146" y="2" width="106" height="22" rx="4" fill="#065f46" stroke="#10b981"/>
+      <text x="199" y="16" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="9" font-weight="bold">Unión: 3 a 9 min</text>
+    </g>
+  </svg>
+
+  <!-- Botones Flotantes Móviles / Arrastrables (INICIO y ARRIBA) -->
+  <button id="fab-home" class="draggable-fab" title="Arrastra para mover o pulsa para ir a INICIO" aria-label="Ir a la pestaña de Inicio">🏠 INICIO</button>
+  <button id="fab-top" class="draggable-fab" title="Arrastra para mover o pulsa para subir al comienzo de esta pestaña" aria-label="Volver arriba de la pestaña actual">⬆️ ARRIBA</button>
+
+  <!-- Contenedor Principal -->
+  <main class="container" id="main-content">
+
+    <!-- Panel de Resultados del Buscador Global -->
+    <div id="search-results-panel" role="region" aria-live="polite">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 style="margin:0; font-size:1.05rem;">Resultados de búsqueda</h3>
+        <button class="tool-btn" id="btn-close-search">Cerrar ✖</button>
+      </div>
+      <div id="search-results-list"></div>
+    </div>
+
+    <!-- ==========================================
+         PESTAÑA 0: INICIO (HOME)
+         ========================================== -->
+    <section class="tab-section active" id="tab-0" data-t="INICIO">
+      <div class="hero-svg-wrapper">
+        <div id="svg-mount-home" class="hero-svg-mount" role="img" aria-label="Ilustración animada de Muse AI de Meta mostrando la Bola Mágica central, creación de imágenes y videos con voz de 10 segundos a 9 minutos, acceso sin VPN y renderizado en la nube con PC apagado."></div>
+      </div>
+
+      <div class="svg-controls-bar">
+        <button class="chip" id="ix" aria-label="Ver índice completo de secciones">☰ Ver índice</button>
+        <button class="chip" id="btn-toggle-svg-home" aria-label="Pausar o reanudar la animación del gráfico">⏸️ Pausar / Reanudar Animación</button>
+      </div>
+
+      <div class="card">
+        <span class="badge badge-info">Manual Oficial Paso a Paso · Nivel Agencia</span>
+        <h1>Crear Videos con Muse AI Gratis y Sin VPN by Rubén Sbarsky</h1>
+        <p>Bienvenido a la guía interactiva integral basada en el tutorial de <strong>Rubén Sbarsky</strong> (Canal: <em>Tutoriales Informáticos</em>). Aprenderás desde cero y sin conocimientos técnicos previos a dominar <strong>Muse AI</strong>, el agente digital "todo en uno" desarrollado sobre la infraestructura de Meta.</p>
+
+        <div class="pedagogy-grid">
+          <div class="pedagogy-box">
+            <h4>¿QUÉ ES MUSE AI?</h4>
+            <p>Es un agente conversacional y generador multimedia todo en uno de Meta que unifica diálogo en lenguaje natural, investigación temática, diseño de pósteres hiperrealistas (<em>Text-to-Image</em>) y producción de videos animados con locución integrada (<em>Text-to-Video</em> e <em>Image-to-Video</em>).</p>
+          </div>
+          <div class="pedagogy-box why">
+            <h4>¿PARA QUÉ SIRVE?</h4>
+            <p>Permite crear ilustraciones fotográficas, clips animados de 10 segundos con narrador deportivo o dramático, animar fotografías fijas, y ensamblar cortometrajes o miniseries continuas de entre <strong>3 y 9 minutos de duración</strong>.</p>
+          </div>
+          <div class="pedagogy-box how">
+            <h4>¿POR QUÉ IMPORTA?</h4>
+            <p>Funciona <strong>directamente sin VPN</strong> desde cualquier navegador web y procesa el renderizado pesado en los <strong>servidores en la nube de Meta</strong>: puedes enviar la orden, apagar tu ordenador o móvil, y recoger tu película terminada al día siguiente.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Acceso Rápido a la Plataforma Oficial</h3>
+        <p>Para seguir este tutorial solo necesitas un navegador actualizado (Chrome, Firefox, Edge o Safari) y conexión a Internet. No necesitas tarjeta gráfica ni equipo potente.</p>
+        <div class="url-card">
+          <div><strong>Plataforma Oficial de Muse AI:</strong></div>
+          <div class="url-text-box" id="url-home-muse">https://muse.ai</div>
+          <div class="url-actions">
+            <a href="https://muse.ai" target="_blank" rel="noopener noreferrer" class="open-url-btn">🔗 Abrir enlace en nueva ventana</a>
+            <button class="copy-btn" data-copy-target="url-home-muse">📋 Copiar URL</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Estructura de Aprendizaje de este Tutorial</h3>
+        <p>Puedes navegar libremente usando las pastillas superiores, el botón <strong>«☰ Índice»</strong> o los botones al pie de cada sección:</p>
+        <ul>
+          <li><strong>1. CONCEPTOS:</strong> Arquitectura Todo en Uno, indicadores visuales (Like, Bola Mágica), sistema de tokens y glosario técnico.</li>
+          <li><strong>2. PROCEDIMIENTO:</strong> Guías paso a paso verificadas (registro OTP con <code>Ctrl + V</code>, generación de imágenes, videos con voz, carga con botón <code>+</code>, guiones con ChatGPT, extensión a 9 minutos y extracción del Prompt Maestro).</li>
+          <li><strong>3. PRÁCTICA:</strong> Los 4 Proyectos Integradores completos y listas de comprobación interactivas con guardado automático.</li>
+          <li><strong>4. PROMPTS:</strong> Biblioteca centralizada con todos los comandos exactos listos para copiar y su contexto de aplicación.</li>
+          <li><strong>5. 33 Preguntas (Q&amp;A):</strong> Banco de evaluación dividido en Nivel 1 (Básico), Nivel 2 (Avanzado) y Nivel 3 (PRO).</li>
+          <li><strong>6. ERRORES:</strong> Solución de fallos frecuentes (bloqueo de clic derecho en OTP, deformaciones visuales de 3 a 6 intentos y ahorro de tokens).</li>
+          <li><strong>7. RESUMEN:</strong> Síntesis por capítulos, tablas de referencia rápida y checklist general.</li>
+          <li><strong>8. FUENTES:</strong> Documentación oficial y enlace directo al video de referencia en YouTube.</li>
+          <li><strong>9. CRÉDITOS:</strong> Autoría destacada de Rubén Sbarsky, ilustración SVG compartida y metadatos fijos de versión.</li>
+        </ul>
+      </div>
+
+      <div class="tab-footer-nav"></div>
+    </section>
+
+    <!-- ==========================================
+         PESTAÑA 1: CONCEPTOS
+         ========================================== -->
+    <section class="tab-section" id="tab-1" data-t="CONCEPTOS">
+      <h2>Conceptos Fundamentales, Interfaz y Glosario Técnico</h2>
+
+      <div class="card">
+        <span class="badge badge-info">Módulo 1 y Módulo 2</span>
+        <h3>1. Ventajas Clave: Sin VPN y Renderizado en la Nube</h3>
+        <p>A diferencia de otras herramientas generativas que bloquean regiones geográficas o exigen instalar una Red Privada Virtual (VPN), <strong>Muse AI de Meta</strong> ofrece acceso libre y directo desde el navegador web en <code>muse.ai</code>.</p>
+        <p>Su característica arquitectónica más importante es el <strong>procesamiento delegatorio en servidores en la nube</strong>: cuando solicitas un video complejo o la unión de un cortometraje largo, el cálculo gráfico se ejecuta íntegramente en el laboratorio computacional de Meta. Esto libera por completo a tu teléfono móvil u ordenador, permitiéndote apagar el dispositivo mientras el servidor termina el trabajo en segundo plano.</p>
+      </div>
+
+      <div class="card">
+        <h3>2. Anatomía de la Interfaz Conversacional "Todo en Uno"</h3>
+        <p>Al iniciar sesión en Muse AI, encontrarás un panel central multimedia y una caja de diálogo inferior que integra cuatro pilares operativos en el mismo hilo:</p>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Pilar Operativo</th>
+                <th>Qué permite hacer</th>
+                <th>Resultado obtenido</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Conversación</strong></td>
+                <td>Dialogar en lenguaje natural y consultar capacidades del agente.</td>
+                <td>Respuestas contextualizadas y memorización de reglas.</td>
+              </tr>
+              <tr>
+                <td><strong>2. Investigación</strong></td>
+                <td>Realizar consultas temáticas y estructurar conceptos o ideas.</td>
+                <td>Síntesis informativa dentro del mismo entorno de trabajo.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Generación de Imágenes</strong></td>
+                <td>Transformar descripciones de texto en arte digital (<em>Text-to-Image</em>).</td>
+                <td>Pósteres e ilustraciones estáticas hiperrealistas.</td>
+              </tr>
+              <tr>
+                <td><strong>4. Generación de Videos</strong></td>
+                <td>Crear clips de 10s, animar fotos y extender historias hasta 9 min.</td>
+                <td>Archivos <code>.mp4</code> con movimiento fluido, voz y efectos sonoros.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>3. Indicadores Visuales de Estado y Controles Multimedia</h3>
+        <p>Cuando envías una instrucción (<em>prompt</em>), Muse AI te informa en tiempo real mediante tres señales visuales:</p>
+        <ul>
+          <li><strong>👍 Icono de Manito / Like:</strong> Aparece sobre tu mensaje enviado. Confirma que la orden fue aceptada por el servidor y entró en la cola de procesamiento (a partir de este instante, en tareas largas, ya puedes apagar tu PC).</li>
+          <li><strong>🔮 Icono de Bola Mágica / Estado de Muse:</strong> Se muestra junto al nombre del agente mientras ejecuta los cálculos generativos.</li>
+          <li><strong>🎬 Etiqueta "Generating Video" / "Generating Image":</strong> Indica explícitamente en pantalla que el renderizado multimedia se está ejecutando en tiempo real.</li>
+        </ul>
+        <h4>Panel de Carga Multimedia (Botón "+")</h4>
+        <p>Ubicado junto a la barra de escritura, el botón con el signo más (<strong><code>+</code></strong>) abre el explorador de archivos de tu dispositivo para importar:</p>
+        <ul>
+          <li><strong>Imágenes estáticas (PNG, JPG):</strong> Para animarlas en video (<em>Image-to-Video</em>) o usarlas como avatares de consistencia.</li>
+          <li><strong>Archivos de audio (MP3):</strong> Para integrarlos en tus proyectos.</li>
+          <li><strong>Clips de video preexistentes:</strong> Para su procesamiento conjunto.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>4. Gestión de Cuenta, Plan Gratuito y Sistema de Tokens</h3>
+        <p>Muse AI cuantifica el uso de recursos computacionales mediante <strong>tokens</strong>. Para inspeccionar tu saldo en cualquier momento:</p>
+        <div class="flow-diagram" aria-label="Ruta de acceso a la configuración de tokens">
+          <div class="flow-node">1. Esquina superior: Icono de Dos Líneas Horizontales (═)</div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-node">2. Seleccionar menú «Configuración» (Settings)</div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-node">3. Abrir pestaña «General»</div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-node">4. Inspeccionar barra de «Plan Gratuito» (ej. 18% usado) y «Tokens Adicionales» (ej. 1,000,000 de tokens)</div>
+        </div>
+        <p><strong>Prioridad de consumo:</strong> El sistema consume primero el porcentaje asignado al <strong>Plan Gratuito</strong>. Solo cuando este llega al 100%, conmuta automáticamente al saldo de <strong>Tokens Adicionales</strong> si dispones de una licencia comercial o paquete adquirido.</p>
+      </div>
+
+      <div class="card">
+        <span class="badge badge-success">Módulo 8 Completo</span>
+        <h3>5. Glosario de Términos Técnicos y Conceptos Clave</h3>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Término Técnico</th>
+                <th>Definición Pedagógica Exacta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Agente IA (AI Agent)</strong></td>
+                <td>Sistema conversacional y multitarea capaz de ejecutar comandos de texto, investigación y creación de medios en un entorno unificado.</td>
+              </tr>
+              <tr>
+                <td><strong>Código OTP (One-Time Password)</strong></td>
+                <td>Clave numérico-alfabética de un solo uso enviada por correo electrónico o SMS para validar la autenticidad del inicio de sesión sin contraseña fija.</td>
+              </tr>
+              <tr>
+                <td><strong>Consistencia Visual</strong></td>
+                <td>Capacidad de la inteligencia artificial para mantener idénticos los rostros, vestuarios y entornos de los personajes a lo largo de múltiples escenas (estilo Google Flow).</td>
+              </tr>
+              <tr>
+                <td><strong>Image-to-Video (Imagen a Video)</strong></td>
+                <td>Proceso generativo donde se utiliza una imagen fija cargada por el usuario (con el botón <code>+</code>) como marco de referencia primario para crear una animación en movimiento.</td>
+              </tr>
+              <tr>
+                <td><strong>Prompt</strong></td>
+                <td>Instrucción o comando redactado en lenguaje natural que se le proporciona a una inteligencia artificial para guiarla en la generación de un resultado específico.</td>
+              </tr>
+              <tr>
+                <td><strong>Prompt Maestro</strong></td>
+                <td>Documento de síntesis de texto que recopila todo el entrenamiento, reglas estéticas y correcciones aprendidas por la IA durante una sesión prolongada para migrarlo a otra cuenta o IA.</td>
+              </tr>
+              <tr>
+                <td><strong>Renderizado en la Nube</strong></td>
+                <td>Procesamiento gráfico y de computación ejecutado en los servidores remotos de Meta/Muse, evitando la sobrecarga del ordenador o móvil local del usuario.</td>
+              </tr>
+              <tr>
+                <td><strong>Text-to-Image (Texto a Imagen)</strong></td>
+                <td>Transformación de instrucciones escritas en ilustraciones o fotografías digitales estáticas de alta resolución.</td>
+              </tr>
+              <tr>
+                <td><strong>Text-to-Video (Texto a Video)</strong></td>
+                <td>Transformación de instrucciones escritas en secuencias de video animadas con movimiento fluido y audio integrado.</td>
+              </tr>
+              <tr>
+                <td><strong>Tokens</strong></td>
+                <td>Unidades de medida computacional utilizadas por las plataformas de IA para cuantificar el saldo y el consumo de recursos generativos por cada solicitud enviada.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tab-footer-nav"></div>
+    </section>
+
+    <!-- ==========================================
+         PESTAÑA 2: PROCEDIMIENTO
+         ========================================== -->
+    <section class="tab-section" id="tab-2" data-t="PROCEDIMIENTO">
+      <h2>Procedimientos Paso a Paso (De Cero a Nivel Experto)</h2>
+      <p>Cada procedimiento está estructurado con una sola acción principal por paso, explicando el motivo de cada acción, el resultado esperado y cómo resolver posibles inconvenientes.</p>
+
+      <!-- PROCEDIMIENTO 1: REGISTRO OTP -->
+      <div class="card">
+        <span class="badge badge-info">Procedimiento 1 · Configuración Inicial</span>
+        <h3>Registro e Inicio de Sesión con Verificación OTP (Atajo Ctrl + V)</h3>
+        <p><strong>Objetivo:</strong> Crear y conectar tu cuenta en Muse AI sin VPN superando el bloqueo de seguridad del clic derecho en los casilleros de verificación.</p>
+
+        <div class="flow-diagram">
+          <div class="flow-node">[Inicio: Acceder a muse.ai]</div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-node">[Ingresar Correo Electrónico o Número de Teléfono]</div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-node">[Hacer clic en "Continuar"]</div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-node">[Abrir Bandeja de Entrada de Correo / SMS y copiar el Código OTP]</div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-node">[Hacer clic en el primer casillero de Muse AI y presionar Ctrl + V]</div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-node">[Acceso Concedido: Interfaz Conectada]</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">1</span>
+            <strong>Acceder al portal oficial de Muse AI</strong>
+          </div>
+          <p>Abre tu navegador web e ingresa a la dirección oficial <code>https://muse.ai</code>.</p>
+          <div class="step-meta"><strong>Motivo:</strong> Conectar directamente con los servidores en la nube de Meta sin intermediarios ni VPN.<br><strong>Resultado esperado:</strong> Se muestra la pantalla de bienvenida con el campo de acceso.</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">2</span>
+            <strong>Introducir tu correo electrónico o teléfono celular</strong>
+          </div>
+          <p>Escribe tu dirección de correo electrónico o número de móvil en la casilla central y pulsa el botón <strong>«Continuar»</strong>.</p>
+          <div class="step-meta"><strong>Motivo:</strong> Solicitar al sistema el envío de una clave única temporal (OTP) sin necesidad de crear contraseñas complejas.<br><strong>Resultado esperado:</strong> La pantalla cambia mostrando los casilleros vacíos para introducir el código.</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">3</span>
+            <strong>Copiar el código recibido en tu bandeja de entrada o SMS</strong>
+          </div>
+          <p>Abre tu correo electrónico (o tus mensajes SMS), localiza el mensaje de Muse AI y copia el código de verificación.</p>
+          <div class="step-meta"><strong>Motivo:</strong> Tener el código exacto en el portapapeles para evitar errores de tipeo.<br><strong>Solución si no llega:</strong> Revisa la carpeta de <em>Spam</em> o <em>Correo no deseado</em> y pulsa el botón actualizar (<em>Refresh</em>), o intenta con número telefónico SMS.</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">4</span>
+            <strong>Pegar el código usando el teclado (Ctrl + V)</strong>
+          </div>
+          <p>Haz clic izquierdo sobre el <strong>primer casillero</strong> en la ventana de Muse AI y presiona en tu teclado la combinación <strong><code>Ctrl + V</code></strong> (en móvil, mantén pulsado el primer casillero o usa el botón pegar del teclado virtual).</p>
+          <div class="step-meta"><strong>Motivo crítico:</strong> La interfaz de Muse AI bloquea el menú contextual del clic derecho del ratón por seguridad.<br><strong>Resultado esperado:</strong> El código se distribuye automáticamente y la interfaz principal aparece como <strong>«conectada»</strong> junto al icono de Muse.</div>
+        </div>
+      </div>
+
+      <!-- PROCEDIMIENTO 2: CONTENIDOS BÁSICOS -->
+      <div class="card">
+        <span class="badge badge-info">Procedimiento 2 · Generación Básica</span>
+        <h3>Interacción Inicial, Imágenes Hiperrealistas y Clips de Video de 10s con Voz</h3>
+        <p><strong>Objetivo:</strong> Contextualizar al agente, crear un póster gráfico de alta resolución, generar clips de video de 10 segundos con narración de voz automática y animar fotos propias.</p>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">1</span>
+            <strong>Entablar el diálogo inicial de calibración</strong>
+          </div>
+          <p>Copia y envía el siguiente prompt en la barra inferior de chat antes de pedir archivos pesados:</p>
+          <div class="copy-block">
+            <div class="copy-header">
+              <span class="copy-label">Prompt de Prueba Inicial</span>
+              <button class="copy-btn" data-copy-target="proc-p1">📋 COPIAR</button>
+            </div>
+            <div class="copy-content" id="proc-p1">hola Muse quiero que me digas cómo te llamas quién eres y realmente en qué puntos podrías ayudarme en mi vida</div>
+          </div>
+          <div class="step-meta"><strong>Motivo:</strong> Verificar la velocidad de respuesta del agente y activar el contexto conversacional de la sesión.<br><strong>Resultado esperado:</strong> Muse AI se presenta detallando sus capacidades de conversación, investigación, imagen y video.</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">2</span>
+            <strong>Generar un póster estático hiperrealista (Text-to-Image)</strong>
+          </div>
+          <p>Envía una descripción detallada indicando el sujeto, tipo de encuadre ("póster espectacular") y entorno:</p>
+          <div class="copy-block">
+            <div class="copy-header">
+              <span class="copy-label">Prompt Text-to-Image (Guacamayo)</span>
+              <button class="copy-btn" data-copy-target="proc-p2">📋 COPIAR</button>
+            </div>
+            <div class="copy-content" id="proc-p2">por favor quiero que crees una imagen de un guacamayo que sea un póster espectacular que está sentado en en una rama eh pues exactamente en la selva</div>
+          </div>
+          <div class="step-meta"><strong>Resultado esperado:</strong> Verás el icono de Like (👍), la etiqueta <em>Generating Image</em> y finalmente un póster fotográfico de alta resolución listo para descargar.</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">3</span>
+            <strong>Crear un clip de video de 10 segundos con acción o narrador en vivo (Text-to-Video)</strong>
+          </div>
+          <p>Envía cualquiera de estos dos prompts para producir un clip animado de 10 segundos. El segundo incluye locución deportiva automática:</p>
+          <div class="copy-block">
+            <div class="copy-header">
+              <span class="copy-label">Prompt Video Naturaleza (10 segundos)</span>
+              <button class="copy-btn" data-copy-target="proc-p3a">📋 COPIAR</button>
+            </div>
+            <div class="copy-content" id="proc-p3a">quiero que crees un video donde se vea eh un parque lleno de pajaritos eh bien y de pronto aparece un águila bastante con garras depredadoras y pues eh espanta a los pajaritos</div>
+          </div>
+          <div class="copy-block">
+            <div class="copy-header">
+              <span class="copy-label">Prompt Video con Voz y Locución Deportiva Automática</span>
+              <button class="copy-btn" data-copy-target="proc-p3b">📋 COPIAR</button>
+            </div>
+            <div class="copy-content" id="proc-p3b">quiero que crees una carrera de autos que los autos van en competencia y que llegarán a la meta pronto</div>
+          </div>
+          <div class="step-meta"><strong>Motivo:</strong> Al incluir eventos competitivos o narrativos, Muse AI sintetiza automáticamente efectos de sonido y un locutor en off relatando el cruce de meta.<br><strong>Resultado esperado:</strong> Clip de 10 segundos generado en el chat.</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">4</span>
+            <strong>Animar una fotografía fija subida desde tu dispositivo (Image-to-Video)</strong>
+          </div>
+          <p>Haz clic en el botón <strong><code>+</code></strong> junto al cuadro de chat, selecciona una imagen (por ejemplo, la foto de un ave), y acompáñala con este comando de movimiento:</p>
+          <div class="copy-block">
+            <div class="copy-header">
+              <span class="copy-label">Prompt Image-to-Video (Animación de Ave)</span>
+              <button class="copy-btn" data-copy-target="proc-p4">📋 COPIAR</button>
+            </div>
+            <div class="copy-content" id="proc-p4">el Ave se fija a ambos lados y luego despega su vuelo de forma libre</div>
+          </div>
+          <div class="step-meta"><strong>Resultado esperado:</strong> Muse AI toma tu imagen fija como primer fotograma y genera un video fluido donde el sujeto cobra vida.</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">5</span>
+            <strong>Descargar el video para activar el sonido y volver al chat</strong>
+          </div>
+          <p>Haz clic en el botón <strong>«Descarga»</strong> ubicado en la esquina del video generado y abre el archivo <code>.mp4</code> en tu reproductor local. Luego pulsa la <strong><code>X</code></strong> para cerrar la vista previa.</p>
+          <div class="step-meta"><strong>Motivo:</strong> Los navegadores suelen silenciar (mutear) por defecto la vista previa embebida. Al descargar el archivo <code>.mp4</code> escucharás la pista de voz y música original a máxima calidad.</div>
+        </div>
+      </div>
+
+      <!-- PROCEDIMIENTO 3: NARRATIVA Y VIDEOS LARGOS -->
+      <div class="card">
+        <span class="badge badge-pro">Procedimiento 3 · Producción Narrativa Avanzada</span>
+        <h3>Creación de Cortometrajes (30s) y Películas Largas (de 3 a 9 Minutos)</h3>
+        <p><strong>Objetivo:</strong> Superar el límite base de 10 segundos estructurando guiones con ChatGPT, manteniendo la consistencia de los personajes (estilo Google Flow) y unificando tramos de 1.5 minutos en los servidores de Meta.</p>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">1</span>
+            <strong>Solicitar a ChatGPT un guion segmentado en bloques de 10 segundos</strong>
+          </div>
+          <p>Abre ChatGPT y ejecuta este prompt para obtener una estructura lista para copiar y pegar:</p>
+          <div class="copy-block">
+            <div class="copy-header">
+              <span class="copy-label">Prompt para ChatGPT (Segmentador de Guion)</span>
+              <button class="copy-btn" data-copy-target="proc-p5">📋 COPIAR</button>
+            </div>
+            <div class="copy-content" id="proc-p5">Quiero que crees una historia de 30 segundos una historia de amor y que luego me entregues eh tres prompts o cada prompt eh en 10 segundos entrégame solamente en una sola entrega listo para copiar y pegar y entregarle a otra inteligencia artificial para que pueda generar este vídeo eh de forma conjunta en 30 segundos</div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">2</span>
+            <strong>Entregar la orden de cortometraje y consistencia a Muse AI</strong>
+          </div>
+          <p>Pega en Muse AI la instrucción principal acompañada de los nombres de personajes, vestuario fijo, paleta de colores y los 3 bloques de 10 segundos obtenidos:</p>
+          <div class="copy-block">
+            <div class="copy-header">
+              <span class="copy-label">Prompt de Entrada para Cortometraje en Muse AI</span>
+              <button class="copy-btn" data-copy-target="proc-p6">📋 COPIAR</button>
+            </div>
+            <div class="copy-content" id="proc-p6">genera un cortometraje romántico de exactamente 30 segundos</div>
+          </div>
+          <div class="step-meta"><strong>Clave de Consistencia (Estilo Google Flow):</strong> Mantén siempre los mismos nombres de personajes y descripción de vestuario en cada bloque, o sube sus avatares mediante el botón <code>+</code>.</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">3</span>
+            <strong>Extender la historia en tramos de 1.5 minutos (90 segundos)</strong>
+          </div>
+          <p>Una vez que Muse AI ha establecido el estilo y los personajes de la historia, pídele que amplíe la trama enviando:</p>
+          <div class="copy-block">
+            <div class="copy-header">
+              <span class="copy-label">Prompt de Extensión a Tramos de 1.5 Minutos</span>
+              <button class="copy-btn" data-copy-target="proc-p7">📋 COPIAR</button>
+            </div>
+            <div class="copy-content" id="proc-p7">continúa con la segunda parte</div>
+          </div>
+          <div class="step-meta"><strong>Resultado esperado:</strong> El servidor en la nube de Muse AI pasa de clips de 10 segundos a generar tramos continuos de <strong>1.5 minutos (90 segundos)</strong> cada uno.</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">4</span>
+            <strong>Unificar y ensamblar todos los tramos en un solo video de hasta 9 minutos</strong>
+          </div>
+          <p>Cuando tengas generados los segmentos parciales, ordénale al servidor que los una en un único archivo final:</p>
+          <div class="copy-block">
+            <div class="copy-header">
+              <span class="copy-label">Prompt de Ensamblaje y Unión Final</span>
+              <button class="copy-btn" data-copy-target="proc-p8">📋 COPIAR</button>
+            </div>
+            <div class="copy-content" id="proc-p8">únelos y entrégame un solo video largo</div>
+          </div>
+          <div class="step-meta"><strong>Automatización con PC apagado:</strong> Verifica que aparezca el icono de Like (👍) en tu mensaje. En ese momento puedes apagar tu ordenador o cerrar el móvil; los servidores de Meta compilarán el video de entre <strong>3 y 9 minutos</strong> y estará listo cuando vuelvas a entrar a <code>muse.ai</code>.</div>
+        </div>
+      </div>
+
+      <!-- PROCEDIMIENTO 4: RE-ENTRENAMIENTO Y PROMPT MAESTRO -->
+      <div class="card">
+        <span class="badge badge-warning">Procedimiento 4 · Preservación del Entrenamiento</span>
+        <h3>Re-entrenamiento Iterativo (3 a 6 Intentos) y Extracción del "Prompt Maestro"</h3>
+        <p><strong>Objetivo:</strong> Corregir cualquier anomalía visual mediante retroalimentación en el mismo chat y exportar todo el aprendizaje antes de que se agoten los tokens gratuitos.</p>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">1</span>
+            <strong>Aplicar la regla de 3 a 6 iteraciones de corrección</strong>
+          </div>
+          <p>Si en el primer intento observas algún detalle imperfecto en las manos, rostros o continuidad, escribe en el mismo chat qué error ocurrió para que Muse AI re-entrene el clip. Repite entre <strong>3 y 6 intentos</strong> hasta que la consistencia quede impecable.</p>
+        </div>
+
+        <div class="step-item">
+          <div class="step-header">
+            <span class="step-number">2</span>
+            <strong>Extraer el "Prompt Maestro" antes de consumir el 100% de tus tokens</strong>
+          </div>
+          <p>Cuando tu sesión ya tenga el estilo perfecto o veas en <em>Configuración &gt; General</em> que tu cuota está por terminar, envía esta orden exacta:</p>
+          <div class="copy-block">
+            <div class="copy-header">
+              <span class="copy-label">Prompt de Exportación del Entrenamiento (Prompt Maestro)</span>
+              <button class="copy-btn" data-copy-target="proc-p9">📋 COPIAR</button>
+            </div>
+            <div class="copy-content" id="proc-p9">entrégame todo lo que hemos entrenado todo lo que hemos practicado en un prompt o una instrucción completísima de todo lo que hemos entrenado instruido practicado y para que pueda trasladarse a otra inteligencia artificial</div>
+          </div>
+          <div class="step-meta"><strong>Resultado esperado y Migración:</strong> Muse AI te entregará un documento de texto exhaustivo con todas las reglas estéticas, avatares y correcciones acumuladas. Guárdalo en un archivo <code>.txt</code> y pégalo en el primer mensaje de una nueva cuenta de Muse AI (o en otra plataforma generativa) para restaurar todo tu entrenamiento al instante sin gastar tokens en pruebas.</div>
+        </div>
+      </div>
+
+      <div class="tab-footer-nav"></div>
+    </section>
+
+    <!-- ==========================================
+         PESTAÑA 3: PRÁCTICA
+         ========================================== -->
+    <section class="tab-section" id="tab-3" data-t="PRÁCTICA">
+      <h2>Casos Prácticos, 4 Proyectos Integradores y Ejercicios Guiados</h2>
+      <p>Pon en práctica lo aprendido ejecutando estos cuatro proyectos reales diseñados en el tutorial. Marca las casillas a medida que avances; tu progreso se guarda automáticamente en tu dispositivo.</p>
+
+      <!-- PROYECTO 1 -->
+      <div class="card">
+        <span class="badge badge-info">Proyecto Integrador 1 · Text-to-Image</span>
+        <h3>Póster Gráfico Hiperrealista de Fauna Silvestre</h3>
+        <p><strong>Objetivo práctico:</strong> Generar una pieza visual estática de alta resolución apta para cartelería digital.</p>
+        <ol>
+          <li>Ingresa a <code>muse.ai</code> y comprueba que tu estado figure como <strong>conectado</strong>.</li>
+          <li>Copia y envía el prompt del guacamayo en la selva.</li>
+          <li>Observa la transición de indicadores (👍 Like → 🔮 Bola Mágica → <em>Generating Image</em>) y descarga la imagen final.</li>
+        </ol>
+        <div class="copy-block">
+          <div class="copy-header">
+            <span class="copy-label">Prompt Proyecto 1</span>
+            <button class="copy-btn" data-copy-target="prac-p1">📋 COPIAR</button>
+          </div>
+          <div class="copy-content" id="prac-p1">por favor quiero que crees una imagen de un guacamayo que sea un póster espectacular que está sentado en en una rama eh pues exactamente en la selva</div>
+        </div>
+        <label class="checklist-item">
+          <input type="checkbox" class="persist-check" data-check-id="proj-1">
+          <span><strong>Completado Proyecto 1:</strong> He generado y descargado el póster hiperrealista del guacamayo en la selva.</span>
+        </label>
+      </div>
+
+      <!-- PROYECTO 2 -->
+      <div class="card">
+        <span class="badge badge-success">Proyecto Integrador 2 · Text-to-Video con Voz</span>
+        <h3>Clip Animado de Acción Automovilística con Locución Deportiva</h3>
+        <p><strong>Objetivo práctico:</strong> Producir una escena dinámica de 10 segundos con efectos de motores y narrador deportivo automático en vivo.</p>
+        <ol>
+          <li>Envía el prompt de la carrera de autos en la caja conversacional de Muse AI.</li>
+          <li>Cuando finalice el renderizado, pulsa el botón de <strong>Descarga</strong> para guardar el archivo <code>.mp4</code>.</li>
+          <li>Reproduce el archivo descargado en tu móvil u ordenador para verificar que el audio esté activo y se escuche al locutor relatando la llegada a la meta del vehículo rojo.</li>
+        </ol>
+        <div class="copy-block">
+          <div class="copy-header">
+            <span class="copy-label">Prompt Proyecto 2</span>
+            <button class="copy-btn" data-copy-target="prac-p2">📋 COPIAR</button>
+          </div>
+          <div class="copy-content" id="prac-p2">quiero que crees una carrera de autos que los autos van en competencia y que llegarán a la meta pronto</div>
+        </div>
+        <label class="checklist-item">
+          <input type="checkbox" class="persist-check" data-check-id="proj-2">
+          <span><strong>Completado Proyecto 2:</strong> He generado el clip de 10 segundos, descargado el archivo .mp4 y verificado la locución deportiva con sonido activo.</span>
+        </label>
+      </div>
+
+      <!-- PROYECTO 3 -->
+      <div class="card">
+        <span class="badge badge-pro">Proyecto Integrador 3 · Guion Coordinado ChatGPT + Muse AI</span>
+        <h3>Cortometraje Romántico de 30 Segundos mediante Prompts Coordinados</h3>
+        <p><strong>Objetivo práctico:</strong> Desarrollar una narrativa romántica continua subdividida en 3 actos de 10 segundos manteniendo la identidad de los protagonistas.</p>
+        <ol>
+          <li>Ejecuta en ChatGPT el prompt solicitando una historia de amor de 30 segundos dividida en 3 bloques de 10 segundos en una sola entrega.</li>
+          <li>Copia la estructura entregada por ChatGPT y pégala en Muse AI encabezada por el comando: <code>genera un cortometraje romántico de exactamente 30 segundos</code>.</li>
+          <li>Si percibes leves cambios en el rostro o vestuario entre las secuencias, aplica de 2 a 3 indicaciones de re-entrenamiento en el mismo hilo de conversación.</li>
+        </ol>
+        <label class="checklist-item">
+          <input type="checkbox" class="persist-check" data-check-id="proj-3">
+          <span><strong>Completado Proyecto 3:</strong> He estructurado los 3 bloques de 10s con ChatGPT y generado el cortometraje romántico de 30 segundos con consistencia visual.</span>
+        </label>
+      </div>
+
+      <!-- PROYECTO 4 -->
+      <div class="card">
+        <span class="badge badge-warning">Proyecto Integrador 4 · Renderizado Cloud Extendido</span>
+        <h3>Miniserie o Novela Dramática Continuada de 3 a 9 Minutos</h3>
+        <p><strong>Objetivo práctico:</strong> Producir un capítulo narrativo completo unificando tramos de 1.5 minutos en los servidores en la nube de Meta.</p>
+        <ol>
+          <li>Inicia la historia dramática en Muse AI estableciendo el escenario y los protagonistas.</li>
+          <li>Envía el comando <code>continúa con la segunda parte</code> para que el servidor genere bloques extendidos de 1.5 minutos (90 segundos).</li>
+          <li>Envía el comando de ensamblaje final: <code>únelos y entrégame un solo video largo</code>.</li>
+          <li>Verifica el icono 👍 de tarea aceptada, cierra o apaga tu equipo si lo deseas, y descarga el video compilado de 3 minutos (o hasta 9 minutos) al finalizar.</li>
+        </ol>
+        <label class="checklist-item">
+          <input type="checkbox" class="persist-check" data-check-id="proj-4">
+          <span><strong>Completado Proyecto 4:</strong> He generado tramos de 1.5 minutos y utilizado el comando de unión para obtener un video largo continuo.</span>
+        </label>
+      </div>
+
+      <!-- EJERCICIO PRÁCTICO DE DIAGNÓSTICO CON SOLUCIÓN EXPLICADA -->
+      <div class="card">
+        <h3>Ejercicio Práctico de Autoevaluación con Solución Explicada</h3>
+        <p><strong>Situación problema:</strong> Un creador de contenido está diseñando una miniserie en Muse AI. Ha logrado que los personajes luzcan idénticos tras 4 intentos de re-entrenamiento, pero al revisar el menú <em>Configuración &gt; General</em> observa que su Plan Gratuito está al <strong>92% de consumo</strong> y no quiere perder todo el aprendizaje logrado cuando llegue al 100%.</p>
+        <details class="qa-item">
+          <summary>👁️ Ver Solución Explicada Paso a Paso</summary>
+          <div class="qa-body">
+            <p><strong>Acción Correcta:</strong> Antes de que el indicador llegue al 100%, el usuario debe solicitar a Muse AI en el mismo hilo de chat la generación del <strong>Prompt Maestro</strong> enviando el comando:</p>
+            <p><code>entrégame todo lo que hemos entrenado todo lo que hemos practicado en un prompt o una instrucción completísima de todo lo que hemos entrenado instruido practicado y para que pueda trasladarse a otra inteligencia artificial</code></p>
+            <p><strong>Por qué funciona:</strong> Muse AI compilará en un texto todas las reglas de vestuario, iluminación, rostros y correcciones de esos 4 entrenamientos. El usuario guarda ese texto en un archivo <code>.txt</code>, abre una nueva cuenta gratuita (o usa otra herramienta de IA) y pega ese bloque como primer mensaje, ahorrando el 100% de los tokens que habría gastado en volver a entrenar al modelo desde cero.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="tab-footer-nav"></div>
+    </section>
+
+    <!-- ==========================================
+         PESTAÑA 4: PROMPTS
+         ========================================== -->
+    <section class="tab-section" id="tab-4" data-t="PROMPTS">
+      <h2>Biblioteca Completa de Prompts Reutilizables</h2>
+      <p>En esta pestaña tienes recopilados <strong>todos los prompts exactos del tutorial</strong> listos para copiar con un solo toque, junto con la explicación de dónde y para qué se emplea cada uno.</p>
+
+      <!-- PROMPT 1 -->
+      <div class="card">
+        <span class="badge badge-info">Prompt #1 · Calibración y Reconocimiento</span>
+        <h3>1. Consulta Inicial de Capacidades al Agente Conversacional</h3>
+        <p><strong>Dónde se emplea:</strong> En la caja de diálogo principal de <code>muse.ai</code> justo después de iniciar sesión por primera vez (Módulo 3.1).</p>
+        <p><strong>Para qué sirve:</strong> Comprobar el tiempo de respuesta del servidor, establecer el contexto conversacional en español y conocer los puntos en los que el agente puede asistirte antes de lanzar generaciones multimedia pesadas.</p>
+        <div class="copy-block">
+          <div class="copy-header">
+            <span class="copy-label">Prompt #1 — Interacción Inicial</span>
+            <button class="copy-btn" data-copy-target="all-prompt-1">📋 COPIAR PROMPT</button>
+          </div>
+          <div class="copy-content" id="all-prompt-1">hola Muse quiero que me digas cómo te llamas quién eres y realmente en qué puntos podrías ayudarme en mi vida</div>
+        </div>
+      </div>
+
+      <!-- PROMPT 2 -->
+      <div class="card">
+        <span class="badge badge-info">Prompt #2 · Text-to-Image</span>
+        <h3>2. Creación de Póster Hiperrealista de Fauna Silvestre (Guacamayo)</h3>
+        <p><strong>Dónde se emplea:</strong> En el chat principal de <code>muse.ai</code> para generación de imágenes estáticas (Módulo 3.2 y Proyecto Integrador 1).</p>
+        <p><strong>Para qué sirve:</strong> Generar una ilustración fotográfica de alta resolución con encuadre de póster profesional detallando sujeto, pose y entorno selvático.</p>
+        <div class="copy-block">
+          <div class="copy-header">
+            <span class="copy-label">Prompt #2 — Póster Guacamayo en la Selva</span>
+            <button class="copy-btn" data-copy-target="all-prompt-2">📋 COPIAR PROMPT</button>
+          </div>
+          <div class="copy-content" id="all-prompt-2">por favor quiero que crees una imagen de un guacamayo que sea un póster espectacular que está sentado en en una rama eh pues exactamente en la selva</div>
+        </div>
+      </div>
+
+      <!-- PROMPT 3 -->
+      <div class="card">
+        <span class="badge badge-success">Prompt #3 · Text-to-Video (10 Segundos)</span>
+        <h3>3. Generación de Video de Naturaleza y Acción (Parque y Águila)</h3>
+        <p><strong>Dónde se emplea:</strong> En el chat principal de <code>muse.ai</code> para crear un clip animado estándar de 10 segundos a partir de texto (Módulo 3.3).</p>
+        <p><strong>Para qué sirve:</strong> Producir una escena dinámica con múltiples sujetos en movimiento y cambio de ritmo dramático en una entrega de 10 segundos.</p>
+        <div class="copy-block">
+          <div class="copy-header">
+            <span class="copy-label">Prompt #3 — Video Parque y Águila (10s)</span>
+            <button class="copy-btn" data-copy-target="all-prompt-3">📋 COPIAR PROMPT</button>
+          </div>
+          <div class="copy-content" id="all-prompt-3">quiero que crees un video donde se vea eh un parque lleno de pajaritos eh bien y de pronto aparece un águila bastante con garras depredadoras y pues eh espanta a los pajaritos</div>
+        </div>
+      </div>
+
+      <!-- PROMPT 4 -->
+      <div class="card">
+        <span class="badge badge-success">Prompt #4 · Text-to-Video con Voz Integrada</span>
+        <h3>4. Video de Carrera de Autos con Narración Deportiva Automática</h3>
+        <p><strong>Dónde se emplea:</strong> En el chat principal de <code>muse.ai</code> cuando se desea que el video incluya locución hablada automática (Módulo 3.4 y Proyecto Integrador 2).</p>
+        <p><strong>Para qué sirve:</strong> Activar el motor de síntesis de voz de Muse AI; al describir una competencia llegando a la meta, la IA genera el video de 10 segundos e incorpora una voz en off que relata en vivo la victoria del auto ganador.</p>
+        <div class="copy-block">
+          <div class="copy-header">
+            <span class="copy-label">Prompt #4 — Carrera de Autos con Locutor</span>
+            <button class="copy-btn" data-copy-target="all-prompt-4">📋 COPIAR PROMPT</button>
+          </div>
+          <div class="copy-content" id="all-prompt-4">quiero que crees una carrera de autos que los autos van en competencia y que llegarán a la meta pronto</div>
+        </div>
+      </div>
+
+      <!-- PROMPT 5 -->
+      <div class="card">
+        <span class="badge badge-info">Prompt #5 · Image-to-Video</span>
+        <h3>5. Animación de Imagen Fija Cargada por el Usuario (Vuelo del Ave)</h3>
+        <p><strong>Dónde se emplea:</strong> En el chat de <code>muse.ai</code> inmediatamente después de haber subido una fotografía estática mediante el botón <strong><code>+</code></strong> (Módulo 3.5).</p>
+        <p><strong>Para qué sirve:</strong> Indicarle a la inteligencia artificial qué movimiento exacto debe ejecutar el sujeto de la fotografía importada para transformarla en un clip de video fluido.</p>
+        <div class="copy-block">
+          <div class="copy-header">
+            <span class="copy-label">Prompt #5 — Movimiento sobre Imagen Cargada</span>
+            <button class="copy-btn" data-copy-target="all-prompt-5">📋 COPIAR PROMPT</button>
+          </div>
+          <div class="copy-content" id="all-prompt-5">el Ave se fija a ambos lados y luego despega su vuelo de forma libre</div>
+        </div>
+      </div>
+
+      <!-- PROMPT 6 -->
+      <div class="card">
+        <span class="badge badge-pro">Prompt #6 · Estructuración Externa en ChatGPT</span>
+        <h3>6. Estructuración y Segmentación de Guion en Bloques de 10 Segundos</h3>
+        <p><strong>Dónde se emplea:</strong> En <strong>ChatGPT (OpenAI)</strong> antes de llevar el guion a Muse AI (Módulo 4.1, Módulo 4.2 y Proyecto Integrador 3).</p>
+        <p><strong>Para qué sirve:</strong> Subdividir una historia de 30 segundos en tres prompts secuenciales de 10 segundos cada uno, entregados en un solo bloque listo para copiar y pegar sin perder continuidad narrativa.</p>
+        <div class="copy-block">
+          <div class="copy-header">
+            <span class="copy-label">Prompt #6 — Segmentador de Guiones en ChatGPT</span>
+            <button class="copy-btn" data-copy-target="all-prompt-6">📋 COPIAR PROMPT</button>
+          </div>
+          <div class="copy-content" id="all-prompt-6">Quiero que crees una historia de 30 segundos una historia de amor y que luego me entregues eh tres prompts o cada prompt eh en 10 segundos entrégame solamente en una sola entrega listo para copiar y pegar y entregarle a otra inteligencia artificial para que pueda generar este vídeo eh de forma conjunta en 30 segundos</div>
+        </div>
+      </div>
+
+      <!-- PROMPT 7 -->
+      <div class="card">
+        <span class="badge badge-pro">Prompt #7 · Producción de Cortometraje</span>
+        <h3>7. Orden de Generación de Cortometraje Romántico de 30 Segundos</h3>
+        <p><strong>Dónde se emplea:</strong> En el chat de <code>muse.ai</code> encabezando los 3 bloques de 10 segundos y las descripciones de personajes obtenidas de ChatGPT (Módulo 4.2 y Proyecto Integrador 3).</p>
+        <p><strong>Para qué sirve:</strong> Ordenar a Muse AI la producción coordinada del cortometraje completo respetando la duración de 30 segundos y la consistencia de los protagonistas.</p>
+        <div class="copy-block">
+          <div class="copy-header">
+            <span class="copy-label">Prompt #7 — Cortometraje de 30 Segundos</span>
+            <button class="copy-btn" data-copy-target="all-prompt-7">📋 COPIAR PROMPT</button>
+          </div>
+          <div class="copy-content" id="all-prompt-7">genera un cortometraje romántico de exactamente 30 segundos</div>
+        </div>
+      </div>
+
+      <!-- PROMPT 8 -->
+      <div class="card">
+        <span class="badge badge-warning">Prompt #8 · Extensión de Duración (1.5 Minutos)</span>
+        <h3>8. Continuación de Historia en Tramos Extendidos de 1.5 Minutos</h3>
+        <p><strong>Dónde se emplea:</strong> En el mismo hilo de conversación de <code>muse.ai</code> una vez que la IA ya generó la primera parte y asimiló la estética de la historia (Módulo 4.4 y Proyecto Integrador 4).</p>
+        <p><strong>Para qué sirve:</strong> Activar la generación en la nube de segmentos largos consecutivos de <strong>1.5 minutos (90 segundos)</strong> manteniendo la trama y los personajes.</p>
+        <div class="copy-block">
+          <div class="copy-header">
+            <span class="copy-label">Prompt #8 — Continuación de Segunda Parte</span>
+            <button class="copy-btn" data-copy-target="all-prompt-8">📋 COPIAR PROMPT</button>
+          </div>
+          <div class="copy-content" id="all-prompt-8">continúa con la segunda parte</div>
+        </div>
+      </div>
+
+      <!-- PROMPT 9 -->
+      <div class="card">
+        <span class="badge badge-warning">Prompt #9 · Ensamblaje Cloud (3 a 9 Minutos)</span>
+        <h3>9. Unificación y Ensamblaje de Segmentos en un Único Video Largo</h3>
+        <p><strong>Dónde se emplea:</strong> En el chat de <code>muse.ai</code> después de haber creado dos o más tramos parciales de 1.5 minutos (Módulo 4.5 y Proyecto Integrador 4).</p>
+        <p><strong>Para qué sirve:</strong> Ordenar a los servidores en la nube de Meta que unan todos los tramos generados y entreguen un solo archivo de video continuo de entre <strong>3 y 9 minutos totales</strong> (proceso que permite apagar el PC).</p>
+        <div class="copy-block">
+          <div class="copy-header">
+            <span class="copy-label">Prompt #9 — Unificación en un Solo Video Largo</span>
+            <button class="copy-btn" data-copy-target="all-prompt-9">📋 COPIAR PROMPT</button>
+          </div>
+          <div class="copy-content" id="all-prompt-9">únelos y entrégame un solo video largo</div>
+        </div>
+      </div>
+
+      <!-- PROMPT 10 -->
+      <div class="card">
+        <span class="badge badge-pro">Prompt #10 · Exportación del Entrenamiento</span>
+        <h3>10. Extracción del "Prompt Maestro" para Migración de Entrenamiento</h3>
+        <p><strong>Dónde se emplea:</strong> Al final de una sesión de entrenamiento exitoso en <code>muse.ai</code> o cuando el saldo del Plan Gratuito / Tokens está próximo a agotarse (Módulo 5.3 y Módulo 5.4).</p>
+        <p><strong>Para qué sirve:</strong> Obligar al agente a compilar en un único documento de texto todas las reglas de estilo, rostros, vestuario y correcciones aprendidas durante las 3 a 6 iteraciones, para poder pegarlo en una cuenta nueva o en otra IA sin empezar desde cero.</p>
+        <div class="copy-block">
+          <div class="copy-header">
+            <span class="copy-label">Prompt #10 — Extracción del Prompt Maestro Completo</span>
+            <button class="copy-btn" data-copy-target="all-prompt-10">📋 COPIAR PROMPT</button>
+          </div>
+          <div class="copy-content" id="all-prompt-10">entrégame todo lo que hemos entrenado todo lo que hemos practicado en un prompt o una instrucción completísima de todo lo que hemos entrenado instruido practicado y para que pueda trasladarse a otra inteligencia artificial</div>
+        </div>
+      </div>
+
+      <div class="tab-footer-nav"></div>
+    </section>
+
+    <!-- ==========================================
+         PESTAÑA 5: 33 Preguntas (Q&A)
+         ========================================== -->
+    <section class="tab-section" id="tab-5" data-t="33 Preguntas (Q&A)">
+      <h2>Banco Completo de 33 Preguntas y Respuestas (Q&amp;A por Niveles)</h2>
+      <p>Explora las 33 preguntas y respuestas oficiales ordenadas por nivel de dificultad: <strong>Nivel 1 (Básico)</strong>, <strong>Nivel 2 (Avanzado)</strong> y <strong>Nivel 3 (PRO)</strong>. Puedes desplegar todas a la vez o pulsar sobre cada pregunta individualmente.</p>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px;">
+        <button class="chip" id="btn-expand-all-qa">➕ Desplegar las 33 Respuestas</button>
+        <button class="chip" id="btn-collapse-all-qa">➖ Contraer Todas</button>
+      </div>
+
+      <!-- NIVEL 1: BÁSICO (P1 a P11) -->
+      <div class="card">
+        <span class="badge badge-info">Nivel 1 · Nivel Básico (Preguntas 1 a 11)</span>
+        <h3>Fundamentos, Acceso Sin VPN, Interfaz y Clips Base</h3>
+
+        <details class="qa-item" open>
+          <summary>P1 (Nivel 1): ¿Qué es Muse AI y quién lo desarrolló?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Muse AI es un agente digital multifuncional desarrollado por Meta que permite realizar conversaciones, investigaciones, generación de imágenes y creación de videos con voz dentro de una misma interfaz.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P2 (Nivel 1): ¿Necesito instalar una VPN para usar Muse AI?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> No, una de sus principales ventajas es que funciona directamente sin necesidad de activar una VPN ni configurar redes privadas.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P3 (Nivel 1): ¿Cuál es la dirección web oficial para ingresar a la plataforma?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> La plataforma oficial se encuentra disponible en el dominio <code>muse.ai</code>.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P4 (Nivel 1): ¿Cómo se realiza el proceso de registro e inicio de sesión?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Se ingresa mediante un correo electrónico o número telefónico, tras lo cual la plataforma envía un código de acceso OTP que se valida en la pantalla de inicio.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P5 (Nivel 1): ¿Por qué no puedo usar el botón derecho del ratón para pegar el código OTP?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> La interfaz de Muse AI bloquea el menú contextual de pegado tradicional por seguridad; se debe hacer clic en la primera casilla y presionar la combinación de teclas <code>Ctrl + V</code>.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P6 (Nivel 1): ¿Cómo sé que la plataforma está procesando mi solicitud?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> El sistema muestra un icono de "manito/like" en el mensaje aceptado, una bola mágica animada y la etiqueta en pantalla "Generating Video" o "Generating Image".</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P7 (Nivel 1): ¿De qué duración son los clips individuales estándar de video que genera Muse AI?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Los clips de video generados de forma individual a partir de un texto tienen una duración base de 10 segundos por entrega.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P8 (Nivel 1): ¿Muse AI requiere una computadora con tarjeta gráfica potente?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> No, todo el proceso de renderizado y cálculo gráfico se realiza de manera remota en los servidores en la nube de Meta.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P9 (Nivel 1): ¿Es posible generar imágenes estáticas o pósteres en Muse AI?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Sí, la plataforma permite crear ilustraciones estáticas y pósteres hiperrealistas a partir de descripciones escritas en el chat.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P10 (Nivel 1): ¿Cómo se activan el audio y la voz en los videos generados si aparecen en silencio?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Al descargar el video mediante el botón correspondiente y abrirlo en el reproductor local del equipo, la locución y la música integrada se reproducen con normalidad.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P11 (Nivel 1): ¿Dónde puedo consultar cuántos créditos o saldo me quedan en la cuenta?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> En el menú superior (dos líneas) &gt; Configuración &gt; General, donde se muestra el porcentaje utilizado del plan gratuito y el saldo de tokens adicionales disponibles.</div>
+        </details>
+      </div>
+
+      <!-- NIVEL 2: AVANZADO (P12 a P22) -->
+      <div class="card">
+        <span class="badge badge-success">Nivel 2 · Nivel Avanzado (Preguntas 12 a 22)</span>
+        <h3>Narración con Voz, Image-to-Video, Guiones con ChatGPT y Videos de hasta 9 Minutos</h3>
+
+        <details class="qa-item">
+          <summary>P12 (Nivel 2): ¿Cómo se pueden incluir voces o narraciones automáticas en un video?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Se deben incluir elementos narrativos o competitivos en el prompt (por ejemplo, una carrera de autos); Muse AI generará la escena e integrará automáticamente la voz del narrador relatando el evento.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P13 (Nivel 2): ¿En qué consiste la función Image-to-Video de Muse AI?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Es la capacidad de subir una imagen propia (usando el icono <code>+</code>) y enviarle una instrucción de texto a la IA para que anime el elemento de la imagen en movimiento.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P14 (Nivel 2): ¿Para qué se utiliza ChatGPT en conjunto con Muse AI?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Se utiliza para estructurar historias completas, dividiendo el guion en bloques exactos de 10 segundos formateados como prompts listos para copiar y pegar en Muse AI.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P15 (Nivel 2): ¿Cómo se logra la consistencia de personajes en diferentes clips (Estilo Google Flow)?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Manteniendo nombres de personajes constantes, describiendo vestuarios específicos en cada prompt y utilizando imágenes de referencia cargadas en la plataforma.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P16 (Nivel 2): ¿Qué debo hacer si el primer video generado tiene imperfecciones visuales?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Debe re-entrenar al agente en la misma conversación, indicándole las correcciones necesarias; la IA aprende de las indicaciones y perfecciona el resultado entre el 3.º y el 6.º intento.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P17 (Nivel 2): ¿Puedo apagar mi computadora mientras Muse AI crea un video largo?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Sí, la tarea queda procesándose en el servidor en la nube de Muse; puede apagar la pantalla y el equipo, y recoger el archivo terminado al regresar.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P18 (Nivel 2): ¿Cómo se solicita a la IA que continúe una historia para hacerla más larga?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Se le envía el comando de seguimiento en el chat: <code>"continúa con la segunda parte"</code>, lo que activa la generación de segmentos extendidos de 1.5 minutos.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P19 (Nivel 2): ¿Cómo se fusionan varios clips parciales en un solo archivo definitivo?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Mediante la instrucción de ensamblaje: <code>"únelos y entrégame un solo video largo"</code>, haciendo que el agente entregue una pieza única compilada.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P20 (Nivel 2): ¿Cuál es la duración máxima que puede alcanzar un video unificado en Muse AI?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Siguiendo la secuencia de extensión y unión de segmentos, la plataforma puede entregar un único video final de entre 3 y 9 minutos de duración.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P21 (Nivel 2): ¿Qué tipo de archivos se pueden cargar a la interfaz mediante el botón de la suma (+)?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Permite importar imágenes (PNG/JPG), archivos de audio en formato MP3 y secuencias de video preexistentes para su procesamiento conjunto.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P22 (Nivel 2): ¿Qué sucede cuando se cierra la ventana de vista previa con la casilla X?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> La ventana emergente se cierra de forma segura y el usuario regresa al hilo principal del chat conservando todo el historial de trabajo.</div>
+        </details>
+      </div>
+
+      <!-- NIVEL 3: PRO (P23 a P33) -->
+      <div class="card">
+        <span class="badge badge-pro">Nivel 3 · Nivel PRO (Preguntas 23 a 33)</span>
+        <h3>Prompt Maestro, Migración de Entrenamiento, Arquitectura Cloud y Gestión de Tokens</h3>
+
+        <details class="qa-item">
+          <summary>P23 (Nivel 3): ¿Qué es el "Prompt Maestro" y cuál es su utilidad estratégica?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Es una instrucción compilada gigantesca que exige a la IA resumir todo el aprendizaje, estilo y reglas entrenadas en la sesión para exportarlo a un texto externo.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P24 (Nivel 3): ¿Cómo se redacta el comando para extraer el Prompt Maestro de una sesión?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Se escribe: <code>"entrégame todo lo que hemos entrenado todo lo que hemos practicado [...] en un prompt o una instrucción completísima [...] de todo lo que hemos entrenado instruido practicado y para que pueda trasladarse a otra inteligencia artificial"</code>.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P25 (Nivel 3): ¿Qué permite hacer el Prompt Maestro cuando se agotan los tokens de una cuenta?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Permite trasladar todo el entrenamiento memorizado por la IA a una nueva cuenta gratuita o plataforma equivalente sin tener que repetir el proceso de corrección desde cero.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P26 (Nivel 3): ¿En qué se diferencia el procesamiento en la nube de Muse AI frente a otras IAs tradicionales?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> En que no requiere mantener la sesión activa ni la pestaña abierta; los servidores de Meta continúan el procesamiento en su propio laboratorio de forma independiente.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P27 (Nivel 3): ¿Cuántas iteraciones de re-entrenamiento se recomiendan para lograr una consistencia impecable?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Se recomienda pulir e iterar entre 3 y 6 proyectos/intentos consecutivos hasta que el agente elimine totalmente los errores visuales.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P28 (Nivel 3): ¿Cómo gestiona Muse AI la prioridad entre la cuota gratuita y los tokens comprados?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Consume primero el porcentaje asignado al plan gratuito; una vez agotado este porcentaje, el sistema conmuta automáticamente al saldo de tokens adicionales comprados.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P29 (Nivel 3): ¿Qué alcance tiene el paquete de 1,000,000 de tokens adicionales?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Ofrece una capacidad de renderizado de alta densidad que permite crear y entrenar decenas de videos extendidos y cortometrajes continuos.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P30 (Nivel 3): ¿Cómo influye la interacción conversacional previa en la calidad de la generación de video?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Establecer un diálogo inicial permite a la IA contextualizar el rol del usuario, adaptar el tono de la narrativa y recordar las restricciones temáticas especificadas.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P31 (Nivel 3): ¿Qué estrategia se debe seguir si el generador omite la narración de voz en un video deportivo o dramático?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Debe reforzarse el prompt especificando explícitamente la acción de un relator en vivo o agregando diálogos directos entre comillas para forzar la síntesis de voz en el motor de audio.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P32 (Nivel 3): ¿Se puede reutilizar el Prompt Maestro en motores de IA generativa de otros creadores?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Sí, al ser un documento de instrucciones en lenguaje natural altamente detallado, puede ser importado en otras IAs conversacionales o de video para replicar el mismo personaje y estética.</div>
+        </details>
+
+        <details class="qa-item">
+          <summary>P33 (Nivel 3): ¿Cuál es la ruta exacta dentro del software para verificar si se requiere comprar más tokens?</summary>
+          <div class="qa-body"><strong>Respuesta:</strong> Menú lateral de dos líneas &gt; Configuración &gt; General &gt; Panel de Plan Gratuito y Tokens Adicionales.</div>
+        </details>
+      </div>
+
+      <div class="tab-footer-nav"></div>
+    </section>
+
+    <!-- ==========================================
+         PESTAÑA 6: ERRORES
+         ========================================== -->
+    <section class="tab-section" id="tab-6" data-t="ERRORES">
+      <h2>Guía de Solución de Problemas, Errores Frecuentes y Buenas Prácticas</h2>
+
+      <div class="card">
+        <span class="badge badge-warning">Problema 1 · Autenticación y Acceso</span>
+        <h3>1. Problemas al Recibir o Pegar el Código de Verificación OTP</h3>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Síntoma / Error</th>
+                <th>Causa Técnica</th>
+                <th>Solución Verificada Paso a Paso</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>No funciona el clic derecho → Pegar</strong> al intentar introducir el código OTP.</td>
+                <td>La interfaz de Muse AI bloquea por seguridad el menú contextual del ratón en las casillas de validación.</td>
+                <td>Haz clic izquierdo sobre el <strong>primer casillero</strong> de entrada y presiona <strong><code>Ctrl + V</code></strong> en tu teclado físico.</td>
+              </tr>
+              <tr>
+                <td><strong>No llega el correo con el código OTP</strong> tras pulsar Continuar.</td>
+                <td>Retraso de sincronización del gestor de correo o filtrado automático.</td>
+                <td>Revisa la carpeta de <strong>Spam o Correo no deseado</strong>, pulsa el botón de actualización (<em>Refresh</em>) en tu correo, o regístrate usando tu <strong>número de teléfono celular por SMS</strong>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="badge badge-info">Problema 2 · Calidad y Consistencia Visual</span>
+        <h3>2. Deformaciones Visuales, Cambios de Rostro o Silencio en el Reproductor</h3>
+        <div class="flow-diagram">
+          <div class="flow-node">[Primer intento de generación] ──► ¿Presenta imperfecciones visuales?</div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-node">SÍ: No descartes el proyecto. Escribe en el mismo chat el error específico detectado (Re-entrenar)</div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-node">Repite e instruye de 3 a 6 intentos hasta que el agente memorice tus preferencias estéticas</div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-node">NO: Aprueba el resultado y avanza a la siguiente escena o solicita la extensión de 1.5 minutos</div>
+        </div>
+        <ul>
+          <li><strong>Error común (Abandonar al primer intento):</strong> Descartar la historia si el primer clip muestra extremidades o rasgos imprecisos. <strong>Solución:</strong> Corrígelo conversacionalmente en el mismo hilo; entre el 3.º y el 6.º intento las anomalías desaparecen.</li>
+          <li><strong>Error común (El video parece no tener voz):</strong> Intentar escuchar el audio únicamente en la miniatura del navegador. <strong>Solución:</strong> Pulsa el botón de <strong>Descarga</strong> y abre el archivo <code>.mp4</code> en el reproductor de tu dispositivo, o refuerza el prompt pidiendo un relator en vivo o diálogos entre comillas.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="badge badge-success">Problema 3 · Gestión de Recursos</span>
+        <h3>3. Optimización del Consumo del Saldo de Tokens (Ejemplos Correctos vs. Incorrectos)</h3>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>❌ Práctica Incorrecta (Desperdicia Tokens)</th>
+                <th>✅ Práctica Correcta (Ahorra Tokens)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Generar múltiples videos improvisados en Muse AI sin tener definido el guion ni los personajes.</td>
+                <td>Usar primero <strong>ChatGPT</strong> gratis para estructurar la historia en bloques exactos de 10 segundos antes de usar Muse AI.</td>
+              </tr>
+              <tr>
+                <td>Dejar que el Plan Gratuito llegue al 100% sin guardar las reglas aprendidas en la conversación.</td>
+                <td>Vigilar el porcentaje en <em>Configuración &gt; General</em> y extraer el <strong>Prompt Maestro</strong> antes de agotar el saldo.</td>
+              </tr>
+              <tr>
+                <td>Mantener el ordenador encendido a máxima potencia esperando un renderizado de 9 minutos.</td>
+                <td>Confirmar el icono de Like (👍) tras pedir la unión del video largo y apagar el equipo mientras el servidor en la nube termina el trabajo.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tab-footer-nav"></div>
+    </section>
+
+    <!-- ==========================================
+         PESTAÑA 7: RESUMEN
+         ========================================== -->
+    <section class="tab-section" id="tab-7" data-t="RESUMEN">
+      <h2>Resumen Ejecutivo por Capítulos y Lista de Comprobación Final</h2>
+
+      <div class="card">
+        <h3>Síntesis de los Módulos del Tutorial</h3>
+        <ul>
+          <li><strong>Capítulo 1 — Acceso y Nube:</strong> Muse AI de Meta (<code>muse.ai</code>) opera sin VPN y ejecuta todo el renderizado pesado en servidores remotos en la nube. El inicio de sesión se valida con código OTP pegándolo con <code>Ctrl + V</code>.</li>
+          <li><strong>Capítulo 2 — Interfaz Todo en Uno:</strong> Unifica conversación, investigación, imágenes y videos. Informa del estado mediante el icono Like (👍), la Bola Mágica y la etiqueta <em>Generating Video/Image</em>. El botón <code>+</code> admite imágenes (PNG/JPG), audio (MP3) y video.</li>
+          <li><strong>Capítulo 3 — Creación Multimedia Base:</strong> Genera pósteres hiperrealistas (<em>Text-to-Image</em>), clips animados de 10 segundos con narración de voz automática (<em>Text-to-Video</em>) y anima fotografías fijas (<em>Image-to-Video</em>). El sonido se escucha plenamente al descargar el archivo <code>.mp4</code>.</li>
+          <li><strong>Capítulo 4 — Narrativa Extendida (Hasta 9 Minutos):</strong> Con ChatGPT se segmentan guiones en bloques de 10s para lograr cortometrajes de 30s con consistencia estilo Google Flow. Con el comando <code>continúa con la segunda parte</code> se crean tramos de 1.5 minutos, y con <code>únelos y entrégame un solo video largo</code> se compilan piezas de 3 a 9 minutos.</li>
+          <li><strong>Capítulo 5 — Re-entrenamiento y Prompt Maestro:</strong> La perfección visual se alcanza re-entrenando en el mismo chat entre 3 y 6 intentos. Con el comando del <strong>Prompt Maestro</strong> se exporta todo el aprendizaje para restaurarlo en cuentas nuevas o en otras IAs.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Tabla Comparativa de Modalidades de Creación en Muse AI</h3>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Modalidad</th>
+                <th>Entrada Requerida</th>
+                <th>Duración / Formato Entregado</th>
+                <th>Comando / Acción Clave</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Text-to-Image</strong></td>
+                <td>Prompt descriptivo en el chat</td>
+                <td>Imagen estática / Póster hiperrealista</td>
+                <td>Describir sujeto, "póster espectacular" y entorno</td>
+              </tr>
+              <tr>
+                <td><strong>Text-to-Video Base</strong></td>
+                <td>Prompt de acción o competencia</td>
+                <td>Clip <code>.mp4</code> de <strong>10 segundos</strong> con voz/audio</td>
+                <td>Incluir acción competitiva o relator para activar voz</td>
+              </tr>
+              <tr>
+                <td><strong>Image-to-Video</strong></td>
+                <td>Foto subida con botón <code>+</code> + Prompt</td>
+                <td>Clip <code>.mp4</code> animado desde la foto fija</td>
+                <td>Subir PNG/JPG con <code>+</code> e indicar movimiento</td>
+              </tr>
+              <tr>
+                <td><strong>Cortometraje Coordinado</strong></td>
+                <td>3 bloques de 10s desde ChatGPT</td>
+                <td>Cortometraje de <strong>30 segundos</strong> consistente</td>
+                <td><code>genera un cortometraje romántico de exactamente 30 segundos</code></td>
+              </tr>
+              <tr>
+                <td><strong>Extensión y Unión Cloud</strong></td>
+                <td>Seguimiento en el mismo hilo</td>
+                <td>Tramos de <strong>1.5 min</strong> unidos en <strong>3 a 9 min</strong></td>
+                <td><code>continúa con la segunda parte</code> + <code>únelos y entrégame un solo video largo</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Checklist General de Dominio del Tutorial (Con Persistencia)</h3>
+        <p>Marca cada punto para registrar tu dominio completo de la metodología de Muse AI:</p>
+        <label class="checklist-item">
+          <input type="checkbox" class="persist-check" data-check-id="sum-1">
+          <span>Sé ingresar a <code>muse.ai</code> sin VPN y validar el código OTP presionando <code>Ctrl + V</code> en el primer casillero.</span>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="persist-check" data-check-id="sum-2">
+          <span>Sé revisar mi saldo del Plan Gratuito y Tokens Adicionales en <em>Menú (dos líneas) &gt; Configuración &gt; General</em>.</span>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="persist-check" data-check-id="sum-3">
+          <span>Sé generar pósteres hiperrealistas, clips de 10 segundos con narración y animar fotos propias con el botón <code>+</code>.</span>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="persist-check" data-check-id="sum-4">
+          <span>Sé combinar ChatGPT + Muse AI para crear cortos de 30s y extenderlos/unirlos en videos de 3 a 9 minutos con el PC apagado.</span>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="persist-check" data-check-id="sum-5">
+          <span>Sé re-entrenar al agente de 3 a 6 veces y extraer el <strong>Prompt Maestro</strong> antes de agotar mis tokens.</span>
+        </label>
+      </div>
+
+      <div class="tab-footer-nav"></div>
+    </section>
+
+    <!-- ==========================================
+         PESTAÑA 8: FUENTES
+         ========================================== -->
+    <section class="tab-section" id="tab-8" data-t="FUENTES">
+      <h2>Fuentes Fiables, Enlaces Oficiales y Documentación de Referencia</h2>
+      <p>Todos los enlaces de esta sección cuentan con el botón directo <strong>«Abrir enlace en nueva ventana»</strong> y botón de copia íntegra al portapapeles.</p>
+
+      <div class="card">
+        <span class="badge badge-info">Fuente Principal Documentada</span>
+        <h3>1. Tutorial de Referencia Principal en YouTube</h3>
+        <ul>
+          <li><strong>Título oficial:</strong> <em>"Muse Sin VPN ✅ Crear Videos con IA GRATIS y con Voz | Muse AI Paso a Paso"</em></li>
+          <li><strong>Canal:</strong> <em>Tutoriales Informáticos</em></li>
+          <li><strong>Autor:</strong> Rubén Sbarsky</li>
+        </ul>
+        <div class="url-card">
+          <div><strong>Enlace directo al video en YouTube:</strong></div>
+          <div class="url-text-box" id="url-src-yt">https://youtube.com/watch?v=QgtxQWCAGD8&amp;is=UqOluCIH9ATje8l-</div>
+          <div class="url-actions">
+            <a href="https://youtube.com/watch?v=QgtxQWCAGD8&is=UqOluCIH9ATje8l-" target="_blank" rel="noopener noreferrer" class="open-url-btn">🔗 Abrir enlace en nueva ventana</a>
+            <button class="copy-btn" data-copy-target="url-src-yt">📋 Copiar URL</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="badge badge-success">Plataforma Oficial</span>
+        <h3>2. Plataforma Oficial de Muse AI (Meta)</h3>
+        <p>Portal web de acceso directo sin VPN para conversación, investigación y generación de imágenes y videos en la nube.</p>
+        <div class="url-card">
+          <div><strong>Sitio Web / Dominio Oficial:</strong></div>
+          <div class="url-text-box" id="url-src-muse">https://muse.ai</div>
+          <div class="url-actions">
+            <a href="https://muse.ai" target="_blank" rel="noopener noreferrer" class="open-url-btn">🔗 Abrir enlace en nueva ventana</a>
+            <button class="copy-btn" data-copy-target="url-src-muse">📋 Copiar URL</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="badge badge-pro">Herramientas Complementarias Citadas</span>
+        <h3>3. Herramientas de Apoyo Metodológico</h3>
+        <p><strong>ChatGPT (OpenAI):</strong> Empleado como asistente externo de guionismo para subdividir historias en bloques exactos de 10 segundos listos para copiar y pegar.</p>
+        <div class="url-card">
+          <div><strong>Acceso a ChatGPT (OpenAI):</strong></div>
+          <div class="url-text-box" id="url-src-chatgpt">https://chatgpt.com</div>
+          <div class="url-actions">
+            <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" class="open-url-btn">🔗 Abrir enlace en nueva ventana</a>
+            <button class="copy-btn" data-copy-target="url-src-chatgpt">📋 Copiar URL</button>
+          </div>
+        </div>
+        <p style="margin-top:12px;"><strong>Conceptos de Flujo de Trabajo (Estilo Google Flow):</strong> Referencia metodológica citada en el manual para mantener la consistencia visual de personajes, vestuarios y paletas cromáticas entre múltiples clips consecutivos.</p>
+      </div>
+
+      <div class="tab-footer-nav"></div>
+    </section>
+
+    <!-- ==========================================
+         PESTAÑA 9: CRÉDITOS
+         ========================================== -->
+    <section class="tab-section" id="tab-9" data-t="CRÉDITOS">
+      <!-- Orden obligatorio: 1. Título de la sección -->
+      <h2>CRÉDITOS</h2>
+
+      <!-- Orden obligatorio: 2. SVG animado compartido con INICIO -->
+      <div class="hero-svg-wrapper">
+        <div id="svg-mount-credits" class="hero-svg-mount" role="img" aria-label="Ilustración animada compartida de Muse AI de Meta mostrando el núcleo generativo en la nube, creación de imágenes y videos con voz sin VPN."></div>
+      </div>
+
+      <div class="svg-controls-bar">
+        <button class="chip" id="btn-toggle-svg-credits" aria-label="Pausar o reanudar la animación en Créditos">⏸️ Pausar / Reanudar Animación</button>
+      </div>
+
+      <!-- Orden obligatorio: 3. Breve descripción de la ilustración -->
+      <div class="card">
+        <p style="text-align:center; margin-bottom:0;"><strong>Descripción de la ilustración:</strong> Escena vectorial multicapa en formato vertical 4:5 que representa el ecosistema de <strong>Muse AI de Meta</strong>: la Bola Mágica central conectada mediante flujos de datos en la nube con los módulos de <em>Text-to-Image</em> (pósteres hiperrealistas), <em>Text-to-Video</em> con ondas de locución automática, acceso libre sin VPN, validación OTP con <code>Ctrl + V</code>, extracción del Prompt Maestro y ensamblaje de videos de 10 segundos hasta 9 minutos con el equipo apagado.</p>
+      </div>
+
+      <!-- Orden obligatorio: 4. Nombre del autor (elemento visual más destacado) y 5. Texto «Autor del tutorial» -->
+      <div class="credits-author-box">
+        <div class="credits-author-name">Rubén Sbarsky</div>
+        <div class="credits-author-role">Autor del tutorial</div>
+      </div>
+
+      <!-- Orden obligatorio: 6. Información adicional pertinente y 7. Número de versión + Fecha y hora fijas -->
+      <div class="card">
+        <h3>Información Técnica y Metadatos de Edición</h3>
+        <div class="table-responsive">
+          <table>
+            <tbody>
+              <tr>
+                <th>Canal de Referencia</th>
+                <td>Tutoriales Informáticos (Creado por Rubén Sbarsky)</td>
+              </tr>
+              <tr>
+                <th>Tema del Manual</th>
+                <td>Crear Videos con Muse AI Gratis y Sin VPN by Rubén Sbarsky (Imágenes, Clips con Voz, Cortometrajes y Automatización en la Nube)</td>
+              </tr>
+              <tr>
+                <th>Fecha y Hora de Creación (Fija)</th>
+                <td><strong>05/11/2026 — 07:25:44</strong></td>
+              </tr>
+              <tr>
+                <th>Número de Versión</th>
+                <td><strong>V001</strong> (Archivo: <code>tutorial_muse_ai_gratis_V001.html</code>)</td>
+              </tr>
+              <tr>
+                <th>Estándar de Ingeniería</th>
+                <td>Metodología Gauntlet + Clean Code Architecture · Optimizado para Samsung Galaxy A02s (360px) y Escritorio · 100% Autónomo Sin Dependencias Externas</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tab-footer-nav"></div>
+    </section>
+
+  </main>
+
+  <!-- Notificación Toast Flotante -->
+  <div id="toast-message" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ==========================================================================
+         1. ESTADO DE LA APLICACIÓN Y CONSTANTES (CLEAN CODE MODULE)
+         ========================================================================== */
+      const STORAGE_PREFIX = 'muse_ai_tutorial_v001_';
+      const secs = Array.from(document.querySelectorAll('.tab-section'));
+      const navButtons = Array.from(document.querySelectorAll('.nav-tab-btn'));
+      const dr = document.querySelector('#dr');
+      const mb = document.querySelector('#mb');
+
+      let currentTabIndex = 0;
+      let isSvgPaused = false;
+      let masterSvgTemplate = '';
+
+      /* ==========================================================================
+         2. GESTIÓN SEGURA DE LOCALSTORAGE
+         ========================================================================== */
+      function getSavedValue(key, fallback) {
+        try {
+          const val = window.localStorage.getItem(STORAGE_PREFIX + key);
+          return val !== null ? val : fallback;
+        } catch (err) {
+          return fallback;
+        }
+      }
+
+      function setSavedValue(key, value) {
+        try {
+          window.localStorage.setItem(STORAGE_PREFIX + key, String(value));
+        } catch (err) {
+          // Modo incógnito o almacenamiento restringido: continúa sin bloquear la app
+        }
+      }
+
+      function showToast(message) {
+        const toast = document.getElementById('toast-message');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(function () {
+          toast.classList.remove('show');
+        }, 2600);
+      }
+
+      /* ==========================================================================
+         3. MOTOR SVG COMPARTIDO (PLANTILLA ÚNICA, IDS ÚNICOS Y FALLBACK DATA:)
+         ========================================================================== */
+      function initializeMasterSvgTemplate() {
+        const sourceSvg = document.getElementById('master-svg-source');
+        if (!sourceSvg) return;
+        sourceSvg.removeAttribute('id');
+        sourceSvg.removeAttribute('style');
+        masterSvgTemplate = sourceSvg.outerHTML;
+        sourceSvg.remove();
+      }
+
+      function buildUniqueSvgMarkup(instanceUid) {
+        return masterSvgTemplate.replace(/__UID__/g, instanceUid);
+      }
+
+      function applyFallbackDataImage(container, svgMarkup) {
+        const encoded = encodeURIComponent(svgMarkup);
+        const img = document.createElement('img');
+        img.src = 'data:image/svg+xml;utf8,' + encoded;
+        img.alt = container.getAttribute('aria-label') || 'Ilustración de Muse AI';
+        img.style.width = '100%';
+        img.style.height = '100%';
+        container.innerHTML = '';
+        container.appendChild(img);
+      }
+
+      function mountSvgInstance(containerId, instanceUid) {
+        const container = document.getElementById(containerId);
+        if (!container || !masterSvgTemplate) return;
+
+        const uniqueMarkup = buildUniqueSvgMarkup(instanceUid);
+        try {
+          container.innerHTML = uniqueMarkup;
+          const svgElement = container.querySelector('svg');
+          if (!svgElement) {
+            applyFallbackDataImage(container, uniqueMarkup);
+            return;
+          }
+          svgElement.classList.toggle('svg-paused', isSvgPaused);
+        } catch (err) {
+          applyFallbackDataImage(container, uniqueMarkup);
+        }
+      }
+
+      function ensureVisibleSvgsMounted() {
+        if (currentTabIndex === 0) {
+          const homeMount = document.getElementById('svg-mount-home');
+          if (homeMount && !homeMount.querySelector('svg') && !homeMount.querySelector('img')) {
+            mountSvgInstance('svg-mount-home', 'home_inst');
+          }
+        } else if (currentTabIndex === 9) {
+          const creditsMount = document.getElementById('svg-mount-credits');
+          if (creditsMount && !creditsMount.querySelector('svg') && !creditsMount.querySelector('img')) {
+            mountSvgInstance('svg-mount-credits', 'credits_inst');
+          }
+        }
+      }
+
+      function toggleSvgAnimationState() {
+        isSvgPaused = !isSvgPaused;
+        document.querySelectorAll('.hero-svg-mount svg').forEach(function (svg) {
+          svg.classList.toggle('svg-paused', isSvgPaused);
+        });
+        showToast(isSvgPaused ? '⏸️ Animación SVG en pausa' : '▶️ Animación SVG en movimiento');
+      }
+
+      /* ==========================================================================
+         4. NAVEGACIÓN SPA, ÍNDICE LATERAL (#dr) Y BOTONES ANTERIOR/SIGUIENTE
+         ========================================================================== */
+      function scrollToCurrentTabTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function go(targetIndex) {
+        const validIndex = Math.max(0, Math.min(secs.length - 1, Number(targetIndex) || 0));
+        currentTabIndex = validIndex;
+
+        secs.forEach(function (sec, idx) {
+          sec.classList.toggle('active', idx === validIndex);
+        });
+
+        navButtons.forEach(function (btn, idx) {
+          const isCurrent = idx === validIndex;
+          btn.classList.toggle('active', isCurrent);
+          if (isCurrent) {
+            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          }
+        });
+
+        if (dr) {
+          Array.from(dr.children).forEach(function (a, j) {
+            a.classList.toggle('on', j === validIndex);
+          });
+        }
+
+        if (validIndex === 0) {
+          mountSvgInstance('svg-mount-home', 'home_inst');
+        } else if (validIndex === 9) {
+          mountSvgInstance('svg-mount-credits', 'credits_inst');
+        }
+
+        setSavedValue('active_tab', validIndex);
+        scrollToCurrentTabTop();
+        updateReadingProgressBar();
+      }
+
+      function setupDrawerIndex() {
+        const tg = function (v) {
+          dr.classList.toggle('o', v);
+          mb.setAttribute('aria-expanded', dr.classList.contains('o'));
+        };
+
+        secs.forEach(function (s, i) {
+          const a = document.createElement('a');
+          const titleText = s.dataset.t || (s.querySelector('h2') ? s.querySelector('h2').textContent : 'Sección');
+          a.textContent = (i ? i + '. ' : '') + titleText;
+          a.href = '#tab-' + i;
+          a.onclick = function (ev) {
+            ev.preventDefault();
+            go(i);
+            tg(false);
+          };
+          dr.appendChild(a);
+        });
+
+        mb.onclick = function () {
+          tg();
+        };
+
+        const homeIndexBtn = document.querySelector('#ix');
+        if (homeIndexBtn) {
+          homeIndexBtn.onclick = function () {
+            tg(true);
+          };
+        }
+
+        window.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            tg(false);
+          } else if (e.key === 'ArrowRight' && document.activeElement.tagName !== 'INPUT') {
+            if (currentTabIndex < secs.length - 1) go(currentTabIndex + 1);
+          } else if (e.key === 'ArrowLeft' && document.activeElement.tagName !== 'INPUT') {
+            if (currentTabIndex > 0) go(currentTabIndex - 1);
+          }
+        });
+
+        document.addEventListener('click', function (e) {
+          if (!e.target.closest('#dr,#mb,#ix')) {
+            tg(false);
+          }
+        });
+      }
+
+      function buildFooterStepButtons() {
+        secs.forEach(function (section, index) {
+          const footerContainer = section.querySelector('.tab-footer-nav');
+          if (!footerContainer) return;
+          footerContainer.innerHTML = '';
+
+          if (index > 0) {
+            const prevTitle = secs[index - 1].dataset.t || 'Anterior';
+            const prevBtn = document.createElement('button');
+            prevBtn.type = 'button';
+            prevBtn.className = 'nav-step-btn prev';
+            prevBtn.textContent = '⬅️ Anterior: ' + prevTitle;
+            prevBtn.onclick = function () {
+              go(index - 1);
+            };
+            footerContainer.appendChild(prevBtn);
+          }
+
+          if (index < secs.length - 1) {
+            const nextTitle = secs[index + 1].dataset.t || 'Siguiente';
+            const nextBtn = document.createElement('button');
+            nextBtn.type = 'button';
+            nextBtn.className = 'nav-step-btn next';
+            nextBtn.textContent = 'Siguiente: ' + nextTitle + ' ➡️';
+            nextBtn.onclick = function () {
+              go(index + 1);
+            };
+            footerContainer.appendChild(nextBtn);
+          }
+        });
+      }
+
+      /* ==========================================================================
+         5. BOTONES FLOTANTES MÓVILES / ARRASTRABLES (INICIO Y ARRIBA)
+         ========================================================================== */
+      function makeDraggableFloatingButton(buttonElement, onClickAction, storageKey) {
+        if (!buttonElement) return;
+
+        let isDragging = false;
+        let hasMoved = false;
+        let startX = 0;
+        let startY = 0;
+        let initialLeft = 0;
+        let initialTop = 0;
+
+        const savedPos = getSavedValue(storageKey, null);
+        if (savedPos) {
+          try {
+            const parsed = JSON.parse(savedPos);
+            if (typeof parsed.left === 'number' && typeof parsed.top === 'number') {
+              buttonElement.style.left = Math.max(4, Math.min(window.innerWidth - 92, parsed.left)) + 'px';
+              buttonElement.style.top = Math.max(62, Math.min(window.innerHeight - 54, parsed.top)) + 'px';
+              buttonElement.style.right = 'auto';
+              buttonElement.style.bottom = 'auto';
+            }
+          } catch (e) {}
+        }
+
+        buttonElement.addEventListener('pointerdown', function (e) {
+          isDragging = true;
+          hasMoved = false;
+          startX = e.clientX;
+          startY = e.clientY;
+          const rect = buttonElement.getBoundingClientRect();
+          initialLeft = rect.left;
+          initialTop = rect.top;
+          buttonElement.setPointerCapture(e.pointerId);
+        });
+
+        buttonElement.addEventListener('pointermove', function (e) {
+          if (!isDragging) return;
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+          if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
+            hasMoved = true;
+          }
+          if (hasMoved) {
+            const maxLeft = window.innerWidth - buttonElement.offsetWidth - 4;
+            const maxTop = window.innerHeight - buttonElement.offsetHeight - 4;
+            const newLeft = Math.max(4, Math.min(maxLeft, initialLeft + dx));
+            const newTop = Math.max(62, Math.min(maxTop, initialTop + dy));
+            buttonElement.style.left = newLeft + 'px';
+            buttonElement.style.top = newTop + 'px';
+            buttonElement.style.right = 'auto';
+            buttonElement.style.bottom = 'auto';
+          }
+        });
+
+        buttonElement.addEventListener('pointerup', function (e) {
+          if (!isDragging) return;
+          isDragging = false;
+          buttonElement.releasePointerCapture(e.pointerId);
+
+          if (hasMoved) {
+            const rect = buttonElement.getBoundingClientRect();
+            setSavedValue(storageKey, JSON.stringify({ left: rect.left, top: rect.top }));
+          } else {
+            onClickAction();
+          }
+        });
+      }
+
+      /* ==========================================================================
+         6. COPIADO AL PORTAPAPELES CON FALLBACK SEGURO
+         ========================================================================== */
+      function copyTextContent(rawText, triggerBtn) {
+        const confirmSuccess = function () {
+          if (triggerBtn) {
+            const originalLabel = triggerBtn.innerHTML;
+            triggerBtn.classList.add('copied');
+            triggerBtn.innerHTML = '✅ ¡COPIADO!';
+            setTimeout(function () {
+              triggerBtn.classList.remove('copied');
+              triggerBtn.innerHTML = originalLabel;
+            }, 1800);
+          }
+          showToast('📋 Contenido copiado exactamente al portapapeles');
+        };
+
+        const fallbackTextareaCopy = function () {
+          try {
+            const ta = document.createElement('textarea');
+            ta.value = rawText;
+            ta.style.position = 'fixed';
+            ta.style.top = '-9999px';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            const ok = document.execCommand('copy');
+            document.body.removeChild(ta);
+            if (ok) {
+              confirmSuccess();
+            } else {
+              window.prompt('Mantén pulsado o presiona Ctrl+C para copiar el texto:', rawText);
+            }
+          } catch (err) {
+            window.prompt('Mantén pulsado o presiona Ctrl+C para copiar el texto:', rawText);
+          }
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(rawText).then(confirmSuccess).catch(fallbackTextareaCopy);
+        } else {
+          fallbackTextareaCopy();
+        }
+      }
+
+      function setupCopyButtons() {
+        document.querySelectorAll('.copy-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            const targetId = btn.getAttribute('data-copy-target');
+            const targetEl = document.getElementById(targetId);
+            if (!targetEl) return;
+            copyTextContent(targetEl.textContent.trim(), btn);
+          });
+        });
+      }
+
+      /* ==========================================================================
+         7. BUSCADOR GLOBAL, PREFERENCIAS, CHECKLISTS E IMPRESIÓN A4
+         ========================================================================== */
+      function setupGlobalSearch() {
+        const input = document.getElementById('global-search-input');
+        const panel = document.getElementById('search-results-panel');
+        const list = document.getElementById('search-results-list');
+        const closeBtn = document.getElementById('btn-close-search');
+
+        if (!input || !panel || !list) return;
+
+        input.addEventListener('input', function () {
+          const query = input.value.trim().toLowerCase();
+          if (query.length < 2) {
+            panel.style.display = 'none';
+            return;
+          }
+
+          list.innerHTML = '';
+          let matchesCount = 0;
+
+          secs.forEach(function (sec, idx) {
+            const sectionTitle = sec.dataset.t || 'Sección';
+            const textContent = sec.textContent || '';
+            const lowerText = textContent.toLowerCase();
+            const pos = lowerText.indexOf(query);
+
+            if (pos !== -1) {
+              matchesCount++;
+              const snippetStart = Math.max(0, pos - 45);
+              const snippetEnd = Math.min(textContent.length, pos + 95);
+              const snippet = textContent.substring(snippetStart, snippetEnd).replace(/\s+/g, ' ');
+
+              const itemBtn = document.createElement('button');
+              itemBtn.type = 'button';
+              itemBtn.className = 'tool-btn';
+              itemBtn.style.width = '100%';
+              itemBtn.style.justifyContent = 'flex-start';
+              itemBtn.style.textAlign = 'left';
+              itemBtn.style.padding = '10px';
+              itemBtn.style.marginBottom = '6px';
+              itemBtn.innerHTML = '<div><strong style="color:var(--accent);">[' + sectionTitle + ']</strong> ...' + snippet + '...</div>';
+              itemBtn.onclick = function () {
+                go(idx);
+                panel.style.display = 'none';
+              };
+              list.appendChild(itemBtn);
+            }
+          });
+
+          if (matchesCount === 0) {
+            list.innerHTML = '<p style="margin:0; color:var(--text-secondary);">No se encontraron coincidencias para "' + input.value + '".</p>';
+          }
+          panel.style.display = 'block';
+        });
+
+        if (closeBtn) {
+          closeBtn.onclick = function () {
+            panel.style.display = 'none';
+            input.value = '';
+          };
+        }
+      }
+
+      function setupThemeAndFontControls() {
+        let currentFontScale = parseFloat(getSavedValue('font_scale', '1')) || 1;
+        const applyScale = function (scale) {
+          currentFontScale = Math.max(0.85, Math.min(1.3, Number(scale.toFixed(2))));
+          document.documentElement.style.setProperty('--font-scale', String(currentFontScale));
+          setSavedValue('font_scale', currentFontScale);
+        };
+        applyScale(currentFontScale);
+
+        const savedTheme = getSavedValue('theme', 'dark');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        document.getElementById('btn-font-down').onclick = function () {
+          applyScale(currentFontScale - 0.08);
+          showToast('Tamaño de letra: ' + Math.round(currentFontScale * 100) + '%');
+        };
+
+        document.getElementById('btn-font-up').onclick = function () {
+          applyScale(currentFontScale + 0.08);
+          showToast('Tamaño de letra: ' + Math.round(currentFontScale * 100) + '%');
+        };
+
+        document.getElementById('btn-theme-toggle').onclick = function () {
+          const current = document.documentElement.getAttribute('data-theme');
+          const next = current === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          setSavedValue('theme', next);
+          showToast(next === 'dark' ? '🌙 Tema oscuro activado' : '☀️ Tema claro activado');
+        };
+      }
+
+      function setupChecklistsPersistence() {
+        document.querySelectorAll('.persist-check').forEach(function (checkbox) {
+          const id = checkbox.getAttribute('data-check-id');
+          const isChecked = getSavedValue('check_' + id, 'false') === 'true';
+          checkbox.checked = isChecked;
+          const parent = checkbox.closest('.checklist-item');
+          if (parent) parent.classList.toggle('completed', isChecked);
+
+          checkbox.addEventListener('change', function () {
+            setSavedValue('check_' + id, checkbox.checked);
+            if (parent) parent.classList.toggle('completed', checkbox.checked);
+          });
+        });
+      }
+
+      function setupPrintAndPdfSupport() {
+        let closedDetailsMemory = [];
+
+        const prepareForPrint = function () {
+          mountSvgInstance('svg-mount-home', 'home_inst');
+          mountSvgInstance('svg-mount-credits', 'credits_inst');
+
+          document.querySelectorAll('.hero-svg-mount svg').forEach(function (svg) {
+            svg.classList.add('svg-paused');
+          });
+
+          closedDetailsMemory = [];
+          document.querySelectorAll('details').forEach(function (det) {
+            if (!det.open) {
+              closedDetailsMemory.push(det);
+              det.open = true;
+            }
+          });
+        };
+
+        const restoreAfterPrint = function () {
+          closedDetailsMemory.forEach(function (det) {
+            det.open = false;
+          });
+          closedDetailsMemory = [];
+
+          document.querySelectorAll('.hero-svg-mount svg').forEach(function (svg) {
+            svg.classList.toggle('svg-paused', isSvgPaused);
+          });
+        };
+
+        window.addEventListener('beforeprint', prepareForPrint);
+        window.addEventListener('afterprint', restoreAfterPrint);
+
+        const printBtn = document.getElementById('btn-print-pdf');
+        if (printBtn) {
+          printBtn.onclick = function () {
+            try {
+              prepareForPrint();
+              window.print();
+              setTimeout(restoreAfterPrint, 900);
+            } catch (err) {
+              restoreAfterPrint();
+              showToast('Abre este archivo directamente en el navegador y utiliza Ctrl+P o Cmd+P');
+            }
+          };
+        }
+      }
+
+      function updateReadingProgressBar() {
+        const bar = document.getElementById('reading-progress-bar');
+        if (!bar) return;
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const pct = docHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)) : 0;
+        bar.style.width = pct + '%';
+      }
+
+      /* ==========================================================================
+         8. INICIALIZACIÓN PRINCIPAL
+         ========================================================================== */
+      function initApp() {
+        initializeMasterSvgTemplate();
+        setupDrawerIndex();
+        buildFooterStepButtons();
+
+        navButtons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            const tabIdx = parseInt(btn.getAttribute('data-tab'), 10);
+            go(tabIdx);
+          });
+        });
+
+        const btnToggleSvgHome = document.getElementById('btn-toggle-svg-home');
+        const btnToggleSvgCredits = document.getElementById('btn-toggle-svg-credits');
+        if (btnToggleSvgHome) btnToggleSvgHome.onclick = toggleSvgAnimationState;
+        if (btnToggleSvgCredits) btnToggleSvgCredits.onclick = toggleSvgAnimationState;
+
+        const btnExpandQa = document.getElementById('btn-expand-all-qa');
+        const btnCollapseQa = document.getElementById('btn-collapse-all-qa');
+        if (btnExpandQa) {
+          btnExpandQa.onclick = function () {
+            document.querySelectorAll('#tab-5 details.qa-item').forEach(function (d) { d.open = true; });
+          };
+        }
+        if (btnCollapseQa) {
+          btnCollapseQa.onclick = function () {
+            document.querySelectorAll('#tab-5 details.qa-item').forEach(function (d) { d.open = false; });
+          };
+        }
+
+        makeDraggableFloatingButton(
+          document.getElementById('fab-home'),
+          function () { go(0); showToast('🏠 Has vuelto a INICIO'); },
+          'fab_home_pos'
+        );
+
+        makeDraggableFloatingButton(
+          document.getElementById('fab-top'),
+          function () { scrollToCurrentTabTop(); showToast('⬆️ Inicio de la pestaña actual'); },
+          'fab_top_pos'
+        );
+
+        setupCopyButtons();
+        setupGlobalSearch();
+        setupThemeAndFontControls();
+        setupChecklistsPersistence();
+        setupPrintAndPdfSupport();
+
+        window.addEventListener('scroll', updateReadingProgressBar, { passive: true });
+
+        // Comprobación periódica que repara cualquier contenedor SVG visible vacío
+        setInterval(ensureVisibleSvgsMounted, 1800);
+
+        const initialTab = parseInt(getSavedValue('active_tab', '0'), 10);
+        go(isNaN(initialTab) ? 0 : initialTab);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+      } else {
+        initApp();
+      }
+    })();
+  </script>
+</body>
+</html>
